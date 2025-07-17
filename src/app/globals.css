@@ -1,0 +1,14 @@
+@import 'tailwindcss';
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  body {
+    @apply font-sans antialiased;
+  }
+}
+
+@theme {
+  --font-sans: 'system-ui', sans-serif;
+}

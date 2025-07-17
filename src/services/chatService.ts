@@ -1,0 +1,117 @@
+import { Message } from '@/types';
+
+export interface ChatStreamResponse {
+  type: 'tools_starting' | 'chunk' | 'done' | 'error';
+  data?: {
+    tools?: string[];
+    message?: string;
+  };
+}
+
+export interface ChatRequest {
+  message: string;
+  conversationHistory: Array<{
+    role: string;
+    content: string;
+  }>;
+}
+
+export class ChatService {
+  private static readonly STREAM_ENDPOINT = `${process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:3000'}/api/chat/stream`;
+
+  static async streamChat(
+    request: ChatRequest,
+    onChunk: (content: string, tools?: string[]) => void,
+    onError: (error: string) => void,
+    onComplete: () => void,
+  ): Promise<void> {
+    try {
+      const response = await fetch(ChatService.STREAM_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(request),
+      });
+
+      if (!response.ok) {
+        throw new Error('HTTP error occurred');
+      }
+
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+
+      if (!reader) {
+        throw new Error('No reader available');
+      }
+
+      let toolsUsed: string[] = [];
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split('\n').filter((line) => line.trim());
+
+        for (const line of lines) {
+          try {
+            const parsed: ChatStreamResponse = JSON.parse(line);
+
+            switch (parsed.type) {
+              case 'tools_starting':
+                if (parsed.data?.tools) {
+                  toolsUsed = parsed.data.tools;
+                }
+                break;
+              case 'chunk':
+                if (parsed.data?.message) {
+                  onChunk(parsed.data.message, toolsUsed);
+                }
+                break;
+              case 'done':
+                onComplete();
+                return;
+              case 'error':
+                throw new Error(parsed.data?.message ?? 'Stream error occurred');
+            }
+          } catch {
+            // Skip invalid JSON lines
+            continue;
+          }
+        }
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      onError(errorMessage);
+    }
+  }
+
+  static createUserMessage(content: string): Message {
+    return {
+      id: Date.now().toString(),
+      role: 'user',
+      content: content.trim(),
+      timestamp: new Date(),
+    };
+  }
+
+  static createAssistantMessage(content: string, toolsUsed?: string[]): Message {
+    return {
+      id: (Date.now() + 1).toString(),
+      role: 'assistant',
+      content,
+      timestamp: new Date(),
+      toolsUsed: toolsUsed && toolsUsed.length > 0 ? toolsUsed : undefined,
+    };
+  }
+
+  static createErrorMessage(): Message {
+    return {
+      id: (Date.now() + 1).toString(),
+      role: 'assistant',
+      content: 'Connection error occurred',
+      timestamp: new Date(),
+    };
+  }
+}
