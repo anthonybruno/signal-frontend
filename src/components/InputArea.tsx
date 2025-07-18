@@ -27,7 +27,7 @@ const InputArea: React.FC<InputAreaProps> = ({
 }) => (
   <div
     className={cn(
-      'mx-auto mb-4 w-full max-w-4xl rounded-2xl border-1 border-neutral-300 bg-white p-4 transition-colors',
+      'mx-auto mb-4 w-full max-w-4xl rounded-2xl border-1 border-neutral-300 bg-white dark:bg-neutral-900 p-4 transition-colors',
       'hover:border-neutral-400 hover:shadow',
       inputFocused && 'border-neutral-400 shadow',
     )}

@@ -22,7 +22,7 @@ function MessageBubble({ message }: MessageBubbleProps) {
           <div
             className={cn(
               'max-w-none rounded-xl px-4 py-2',
-              isUser ? 'bg-emerald-600 text-white' : 'bg-neutral-200',
+              cn(isUser ? 'bg-emerald-600 text-white' : 'bg-neutral-200 dark:bg-neutral-900'),
             )}
           >
             <div className="prose prose-sm max-w-none break-words transition-all">

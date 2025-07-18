@@ -9,6 +9,15 @@
   }
 }
 
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-black text-white;
+  }
+}
+
 @theme {
   --font-sans: 'system-ui', sans-serif;
 }
