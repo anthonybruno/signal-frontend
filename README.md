@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Signal Frontend
 
-## Getting Started
+Signal is a full-stack, AI-powered portfolio designed to demonstrate engineering leadership through systems thinking, modern tooling, and practical implementation. Built with LLMs, RAG, and MCP, it serves as a conversational interface to my work, experience, and technical decision-making. This project reflects my ability to architect, lead, and deliver thoughtful software in real-world conditions.
 
-First, run the development server:
+## What it does
+
+The frontend provides a chat interface where users can ask questions about my experience, skills, projects, and interests. The AI responds using:
+
+- Personal knowledge base (experience, skills, projects, etc.)
+- Live data from GitHub, Spotify, and blog RSS feeds
+- Dynamic model routing across multiple AI providers
+
+## Local Development
+
+### Prerequisites
+
+- Node.js 20+
+- Backend service running on port 3000
+- MCP server running on port 3001
+
+### Setup
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Open [http://localhost:4000](http://localhost:4000) in your browser
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The frontend runs on port 4000 and connects to the backend API on port 3000.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Production
 
-## Learn More
+https://signalll.vercel.app
 
-To learn more about Next.js, take a look at the following resources:
+## Tech Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Next.js 15 with React 19
+- TypeScript
+- Tailwind CSS
+- Axios for API calls
+- React Markdown for message rendering
