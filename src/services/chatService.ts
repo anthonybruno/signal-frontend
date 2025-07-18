@@ -2,10 +2,12 @@ import { Message } from '@/types';
 
 export interface ChatStreamResponse {
   type: 'tools_starting' | 'chunk' | 'done' | 'error';
-  data?: {
-    tools?: string[];
-    message?: string;
-  };
+  data?:
+    | string
+    | {
+        tools?: string[];
+        message?: string;
+      };
 }
 
 export interface ChatRequest {
@@ -60,20 +62,27 @@ export class ChatService {
 
             switch (parsed.type) {
               case 'tools_starting':
-                if (parsed.data?.tools) {
+                if (typeof parsed.data === 'object' && parsed.data?.tools) {
                   toolsUsed = parsed.data.tools;
                 }
                 break;
               case 'chunk':
-                if (parsed.data?.message) {
+                if (typeof parsed.data === 'string') {
+                  onChunk(parsed.data, toolsUsed);
+                } else if (typeof parsed.data === 'object' && parsed.data?.message) {
                   onChunk(parsed.data.message, toolsUsed);
                 }
                 break;
               case 'done':
                 onComplete();
                 return;
-              case 'error':
-                throw new Error(parsed.data?.message ?? 'Stream error occurred');
+              case 'error': {
+                const errorMessage =
+                  typeof parsed.data === 'string'
+                    ? parsed.data
+                    : (parsed.data?.message ?? 'Stream error occurred');
+                throw new Error(errorMessage);
+              }
             }
           } catch {
             // Skip invalid JSON lines
