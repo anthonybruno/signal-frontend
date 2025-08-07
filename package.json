@@ -2,6 +2,7 @@
   "name": "signal-frontend",
   "version": "0.1.0",
   "private": true,
+  "description": "Signal’s frontend interface for real-time chat and AI-powered interactions.",
   "type": "module",
   "scripts": {
     "dev": "next dev -p 4000",
