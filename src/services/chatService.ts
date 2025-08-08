@@ -19,7 +19,7 @@ export interface ChatRequest {
 }
 
 export class ChatService {
-  private static readonly STREAM_ENDPOINT = `${process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:3000'}/api/chat/stream`;
+  private static readonly STREAM_ENDPOINT = `${process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:3000'}/chat`;
 
   static async streamChat(
     request: ChatRequest,
