@@ -38,13 +38,13 @@ export function useChat(): UseChatReturn {
               content: msg.content,
             })),
           },
-          (chunk, toolsUsed) => {
+          (chunk, mcp_tool) => {
             streamedContent += chunk;
 
             if (!hasStartedStreaming) {
               const assistantMessage = ChatService.createAssistantMessage(
                 streamedContent,
-                toolsUsed,
+                mcp_tool,
               );
               assistantMessage.id = assistantMessageId;
               setMessages((prev) => [...prev, assistantMessage]);

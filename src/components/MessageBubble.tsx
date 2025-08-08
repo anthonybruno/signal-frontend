@@ -176,17 +176,13 @@ function MessageBubble({ message }: MessageBubbleProps) {
               )}
             </div>
 
-            {/* MCP Tools Used Indicator */}
-            {message.toolsUsed && message.toolsUsed.length > 0 && (
+            {/* MCP Tool Used Indicator */}
+            {message.mcp_tool && (
               <div className="pt-1">
-                <div className="flex flex-col gap-2">
-                  {message.toolsUsed.map((tool, index) => (
-                    <div key={index} className="flex items-center gap-2 text-sm">
-                      <Wrench strokeWidth={2.25} size={14} />
-                      <span>MCP used:</span>
-                      <span className="font-mono text-emerald-600">{tool}</span>
-                    </div>
-                  ))}
+                <div className="flex items-center gap-2 text-sm">
+                  <Wrench strokeWidth={2.25} size={14} />
+                  <span>MCP used:</span>
+                  <span className="font-mono text-emerald-600">{message.mcp_tool}</span>
                 </div>
               </div>
             )}

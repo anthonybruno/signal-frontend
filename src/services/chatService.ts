@@ -5,7 +5,7 @@ export interface ChatStreamResponse {
   data?:
     | string
     | {
-        tools?: string[];
+        tool?: string;
         message?: string;
       };
 }
@@ -23,7 +23,7 @@ export class ChatService {
 
   static async streamChat(
     request: ChatRequest,
-    onChunk: (content: string, tools?: string[]) => void,
+    onChunk: (content: string, mcp_tool?: string) => void,
     onError: (error: string) => void,
     onComplete: () => void,
   ): Promise<void> {
@@ -47,7 +47,7 @@ export class ChatService {
         throw new Error('No reader available');
       }
 
-      let toolsUsed: string[] = [];
+      let mcpTool: string | undefined;
 
       while (true) {
         const { done, value } = await reader.read();
@@ -62,15 +62,15 @@ export class ChatService {
 
             switch (parsed.type) {
               case 'tools_starting':
-                if (typeof parsed.data === 'object' && parsed.data?.tools) {
-                  toolsUsed = parsed.data.tools;
+                if (typeof parsed.data === 'object' && parsed.data?.tool) {
+                  mcpTool = parsed.data.tool;
                 }
                 break;
               case 'chunk':
                 if (typeof parsed.data === 'string') {
-                  onChunk(parsed.data, toolsUsed);
+                  onChunk(parsed.data, mcpTool);
                 } else if (typeof parsed.data === 'object' && parsed.data?.message) {
-                  onChunk(parsed.data.message, toolsUsed);
+                  onChunk(parsed.data.message, mcpTool);
                 }
                 break;
               case 'done':
@@ -105,13 +105,13 @@ export class ChatService {
     };
   }
 
-  static createAssistantMessage(content: string, toolsUsed?: string[]): Message {
+  static createAssistantMessage(content: string, mcp_tool?: string): Message {
     return {
       id: (Date.now() + 1).toString(),
       role: 'assistant',
       content,
       timestamp: new Date(),
-      toolsUsed: toolsUsed && toolsUsed.length > 0 ? toolsUsed : undefined,
+      mcp_tool: mcp_tool ?? undefined,
     };
   }
 
