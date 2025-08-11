@@ -1,4 +1,4 @@
-import { Message } from '@/types';
+import type { Message } from '@/types';
 
 export interface ChatStreamResponse {
   type: 'tools_starting' | 'chunk' | 'done' | 'error';
@@ -49,7 +49,7 @@ export class ChatService {
 
       let mcpTool: string | undefined;
 
-      while (true) {
+      for (;;) {
         const { done, value } = await reader.read();
         if (done) break;
 
@@ -62,14 +62,17 @@ export class ChatService {
 
             switch (parsed.type) {
               case 'tools_starting':
-                if (typeof parsed.data === 'object' && parsed.data?.tool) {
+                if (typeof parsed.data === 'object' && parsed.data.tool) {
                   mcpTool = parsed.data.tool;
                 }
                 break;
               case 'chunk':
                 if (typeof parsed.data === 'string') {
                   onChunk(parsed.data, mcpTool);
-                } else if (typeof parsed.data === 'object' && parsed.data?.message) {
+                } else if (
+                  typeof parsed.data === 'object' &&
+                  parsed.data.message
+                ) {
                   onChunk(parsed.data.message, mcpTool);
                 }
                 break;
@@ -91,7 +94,8 @@ export class ChatService {
         }
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error occurred';
       onError(errorMessage);
     }
   }

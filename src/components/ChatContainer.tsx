@@ -22,16 +22,15 @@ function ChatContainer({ messages, isLoading }: ChatContainerProps) {
     <div className="flex flex-col">
       <div className="flex-1 overflow-y-auto">
         <div className="mx-auto max-w-4xl space-y-6 px-4 pt-10">
-          {messages.length === 0 ? (
-            <></>
-          ) : (
+          {messages.length === 0 ? null : (
             <>
               {messages.map((message) => (
                 <MessageBubble key={message.id} message={message} />
               ))}
-              {isLoading && messages[messages.length - 1]?.role !== 'assistant' && (
+              {isLoading &&
+              messages[messages.length - 1]?.role !== 'assistant' ? (
                 <TypingIndicator />
-              )}
+              ) : null}
             </>
           )}
           <div ref={messagesEndRef} />

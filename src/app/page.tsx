@@ -13,18 +13,6 @@ export default function ChatPage() {
   const [inputFocused, setInputFocused] = useState(false);
   const { messages, isLoading, sendMessage, hasSubmitted } = useChat();
 
-  const handleQuickAction = (questionText: string) => {
-    // Changed from question to questionText for clarity
-    sendMessage(questionText);
-  };
-
-  const handleSendButton = () => {
-    if (message.trim() && !isLoading) {
-      sendMessage(message);
-      setMessage('');
-    }
-  };
-
   return (
     <>
       <div>
@@ -32,7 +20,7 @@ export default function ChatPage() {
           type="floating"
           label="What is this?"
           icon={MessageCircleQuestion}
-          onClick={() => handleQuickAction('Tell me about this project')}
+          onClick={() => sendMessage('Tell me about this project')}
         />
       </div>
       <div className="flex h-screen flex-col">
@@ -46,8 +34,13 @@ export default function ChatPage() {
                 message={message}
                 setMessage={setMessage}
                 onSendMessage={sendMessage}
-                onQuickAction={handleQuickAction}
-                onSendButton={handleSendButton}
+                onQuickAction={sendMessage}
+                onSendButton={() => {
+                  if (message.trim() && !isLoading) {
+                    sendMessage(message);
+                    setMessage('');
+                  }
+                }}
                 isLoading={isLoading}
                 inputFocused={inputFocused}
                 setInputFocused={setInputFocused}
@@ -77,8 +70,13 @@ export default function ChatPage() {
                 message={message}
                 setMessage={setMessage}
                 onSendMessage={sendMessage}
-                onQuickAction={handleQuickAction}
-                onSendButton={handleSendButton}
+                onQuickAction={sendMessage}
+                onSendButton={() => {
+                  if (message.trim() && !isLoading) {
+                    sendMessage(message);
+                    setMessage('');
+                  }
+                }}
                 isLoading={isLoading}
                 inputFocused={inputFocused}
                 setInputFocused={setInputFocused}

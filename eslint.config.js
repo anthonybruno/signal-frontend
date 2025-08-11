@@ -1,9 +1,11 @@
-import js from '@eslint/js';
-import tseslint from 'typescript-eslint';
+import reactConfig from 'abruno-dev-config/eslint/react';
 import prettier from 'eslint-config-prettier';
 import pluginNext from '@next/eslint-plugin-next';
+import typescriptParser from '@typescript-eslint/parser';
+import typescriptPlugin from '@typescript-eslint/eslint-plugin';
 
 export default [
+  ...reactConfig,
   {
     ignores: [
       '**/node_modules/**',
@@ -16,33 +18,31 @@ export default [
       'next-env.d.ts',
     ],
   },
-  js.configs.recommended,
-  ...tseslint.configs.recommended,
   {
     plugins: { '@next/next': pluginNext },
   },
   {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
-      parser: tseslint.parser,
+      parser: typescriptParser,
       parserOptions: {
-        project: './tsconfig.json',
-        tsconfigRootDir: import.meta.dirname,
         ecmaVersion: 'latest',
         sourceType: 'module',
+        ecmaFeatures: {
+          jsx: true,
+        },
+        project: './tsconfig.json',
       },
     },
+    plugins: {
+      '@typescript-eslint': typescriptPlugin,
+    },
     rules: {
-      ...pluginNext.configs.recommended.rules,
       '@next/next/no-html-link-for-pages': 'off',
-      '@typescript-eslint/no-unused-vars': 'error',
-      '@typescript-eslint/no-explicit-any': 'error',
-      '@typescript-eslint/prefer-nullish-coalescing': 'error',
-      '@typescript-eslint/prefer-optional-chain': 'error',
-      'no-var': 'error',
-      'prefer-const': 'error',
-      'no-console': 'warn',
-      'no-debugger': 'error',
+      'max-lines-per-function': 'off',
+      'import/no-unresolved': 'off',
+      'import/extensions': 'off',
+      'react/jsx-no-bind': 'off',
     },
   },
   prettier,

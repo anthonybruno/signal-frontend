@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
-import { Message } from '@/types';
+
 import { ChatService } from '@/services/chatService';
+import type { Message } from '@/types';
 
 interface UseChatReturn {
   messages: Message[];
@@ -15,7 +16,8 @@ export function useChat(): UseChatReturn {
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
   const sendMessage = useCallback(
-    async (messageContent: string) => { // Changed from content to messageContent for clarity
+    async (messageContent: string) => {
+      // Changed from content to messageContent for clarity
       if (!messageContent.trim() || isLoading) return;
       if (!hasSubmitted) setHasSubmitted(true);
 
@@ -38,7 +40,8 @@ export function useChat(): UseChatReturn {
               content: msg.content,
             })),
           },
-          (chunk, mcpTool) => { // Changed from mcp_tool to mcpTool
+          (chunk, mcpTool) => {
+            // Changed from mcp_tool to mcpTool
             streamedContent += chunk;
 
             if (!hasStartedStreaming) {
@@ -52,57 +55,32 @@ export function useChat(): UseChatReturn {
             } else {
               setMessages((prev) =>
                 prev.map((msg) =>
-                  msg.id === assistantMessageId ? { ...msg, content: streamedContent } : msg,
+                  msg.id === assistantMessageId
+                    ? { ...msg, content: streamedContent }
+                    : msg,
                 ),
               );
             }
           },
           (error) => {
             console.error('Chat stream error:', error);
-            if (hasStartedStreaming) {
-              setMessages((prev) =>
-                prev.map((msg) =>
-                  msg.id === assistantMessageId
-                    ? {
-                        ...msg,
-                        content:
-                          "Sorry, I'm having trouble connecting right now. Please try again.",
-                      }
-                    : msg,
-                ),
-              );
-            } else {
-              const errorMessage = ChatService.createErrorMessage();
-              errorMessage.id = assistantMessageId;
-              setMessages((prev) => [...prev, errorMessage]);
-            }
+            const errorMessage = ChatService.createErrorMessage();
+            errorMessage.id = assistantMessageId;
+            setMessages((prev) => [...prev, errorMessage]);
           },
           () => {
             setIsLoading(false);
           },
         );
       } catch {
-        if (hasStartedStreaming) {
-          setMessages((prev) =>
-            prev.map((msg) =>
-              msg.id === assistantMessageId
-                ? {
-                    ...msg,
-                    content: "Sorry, I'm having trouble connecting right now. Please try again.",
-                  }
-                : msg,
-            ),
-          );
-        } else {
-          const errorMessage = ChatService.createErrorMessage();
-          errorMessage.id = assistantMessageId;
-          setMessages((prev) => [...prev, errorMessage]);
-        }
+        const errorMessage = ChatService.createErrorMessage();
+        errorMessage.id = assistantMessageId;
+        setMessages((prev) => [...prev, errorMessage]);
       } finally {
         setIsLoading(false);
       }
     },
-    [isLoading, messages],
+    [isLoading, messages, hasSubmitted],
   );
 
   return {
