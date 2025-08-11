@@ -8,8 +8,6 @@
     "dev": "next dev -p 4000",
     "build": "next build",
     "start": "next start -p 4000",
-    "lint": "eslint src/**/*.{ts,tsx}",
-    "lint:fix": "eslint src/**/*.{ts,tsx} --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
@@ -27,33 +25,19 @@
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^19.8.1",
-    "@next/eslint-plugin-next": "^15.4.6",
     "@tailwindcss/postcss": "^4",
     "@tailwindcss/typography": "^0.5.16",
     "@types/node": "24.0.14",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@typescript-eslint/eslint-plugin": "^8.39.1",
-    "@typescript-eslint/parser": "^8.39.1",
     "abruno-dev-config": "^1.0.7",
     "commitlint": "^19.8.1",
-    "eslint": "^9.33.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.5",
     "prettier-plugin-tailwindcss": "^0.6.12",
     "typescript": "^5.9.2"
   },
   "lint-staged": {
-    "src/**/*.{ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
     "*.{ts,tsx,js,json,md}": [
       "prettier --write"
     ]
