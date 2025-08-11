@@ -4,7 +4,7 @@ export interface Message {
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
-  mcp_tool?: string;
+  mcpTool?: string; // Changed from mcp_tool to mcpTool for consistency
 }
 
 // Frontend Component Types

@@ -15,12 +15,12 @@ export function useChat(): UseChatReturn {
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
   const sendMessage = useCallback(
-    async (content: string) => {
-      if (!content.trim() || isLoading) return;
+    async (messageContent: string) => { // Changed from content to messageContent for clarity
+      if (!messageContent.trim() || isLoading) return;
       if (!hasSubmitted) setHasSubmitted(true);
 
       // Add user message immediately
-      const userMessage = ChatService.createUserMessage(content);
+      const userMessage = ChatService.createUserMessage(messageContent);
       setMessages((prev) => [...prev, userMessage]);
       setIsLoading(true);
 
@@ -32,19 +32,19 @@ export function useChat(): UseChatReturn {
       try {
         await ChatService.streamChat(
           {
-            message: content,
+            message: messageContent,
             conversationHistory: messages.map((msg) => ({
               role: msg.role,
               content: msg.content,
             })),
           },
-          (chunk, mcp_tool) => {
+          (chunk, mcpTool) => { // Changed from mcp_tool to mcpTool
             streamedContent += chunk;
 
             if (!hasStartedStreaming) {
               const assistantMessage = ChatService.createAssistantMessage(
                 streamedContent,
-                mcp_tool,
+                mcpTool, // Changed from mcp_tool to mcpTool
               );
               assistantMessage.id = assistantMessageId;
               setMessages((prev) => [...prev, assistantMessage]);

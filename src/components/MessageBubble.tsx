@@ -177,12 +177,12 @@ function MessageBubble({ message }: MessageBubbleProps) {
             </div>
 
             {/* MCP Tool Used Indicator */}
-            {message.mcp_tool && (
+            {message.mcpTool && (
               <div className="pt-1">
                 <div className="flex items-center gap-2 text-sm">
                   <Wrench strokeWidth={2.25} size={14} />
                   <span>MCP used:</span>
-                  <span className="font-mono text-emerald-600">{message.mcp_tool}</span>
+                  <span className="font-mono text-emerald-600">{message.mcpTool}</span>
                 </div>
               </div>
             )}

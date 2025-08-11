@@ -5,8 +5,8 @@ import { cn } from '@/lib/utils';
 
 interface MessageInputProps {
   message: string;
-  setMessage: (msg: string) => void;
-  onSendMessage: (message: string) => void;
+  setMessage: (messageContent: string) => void; // Changed from msg to messageContent for clarity
+  onSendMessage: (messageContent: string) => void; // Changed from msg to messageContent for clarity
   isLoading: boolean;
   disabled?: boolean;
   onFocus?: () => void;
@@ -22,9 +22,9 @@ function MessageInput({
   onFocus,
   onBlur,
 }: MessageInputProps) {
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
+  const handleKeyDown = (keyboardEvent: KeyboardEvent<HTMLInputElement>) => { // Changed from e to keyboardEvent for clarity
+    if (keyboardEvent.key === 'Enter') {
+      keyboardEvent.preventDefault();
       if (message.trim() && !isLoading && !disabled) {
         onSendMessage(message);
         setMessage('');
@@ -32,8 +32,8 @@ function MessageInput({
     }
   };
 
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMessage(e.target.value);
+  const handleInput = (inputEvent: React.ChangeEvent<HTMLInputElement>) => { // Changed from e to inputEvent for clarity
+    setMessage(inputEvent.target.value);
   };
 
   return (

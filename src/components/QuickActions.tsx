@@ -13,7 +13,7 @@ import {
 import QuickActionButton from './QuickActionButton';
 
 interface QuickActionsProps {
-  onQuickAction: (question: string) => void;
+  onQuickAction: (questionText: string) => void; // Changed from question to questionText for clarity
 }
 
 const QUICK_ACTIONS = [

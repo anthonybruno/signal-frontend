@@ -23,7 +23,7 @@ export class ChatService {
 
   static async streamChat(
     request: ChatRequest,
-    onChunk: (content: string, mcp_tool?: string) => void,
+    onChunk: (content: string, mcpTool?: string) => void,
     onError: (error: string) => void,
     onComplete: () => void,
   ): Promise<void> {
@@ -105,13 +105,13 @@ export class ChatService {
     };
   }
 
-  static createAssistantMessage(content: string, mcp_tool?: string): Message {
+  static createAssistantMessage(content: string, mcpTool?: string): Message {
     return {
       id: (Date.now() + 1).toString(),
       role: 'assistant',
       content,
       timestamp: new Date(),
-      mcp_tool: mcp_tool ?? undefined,
+      mcpTool: mcpTool ?? undefined,
     };
   }
 

@@ -6,9 +6,9 @@ import { cn } from '@/lib/utils';
 
 interface InputAreaProps {
   message: string;
-  setMessage: (msg: string) => void;
-  onSendMessage: (msg: string) => void;
-  onQuickAction: (msg: string) => void;
+  setMessage: (messageContent: string) => void; // Changed from msg to messageContent for clarity
+  onSendMessage: (messageContent: string) => void; // Changed from msg to messageContent for clarity
+  onQuickAction: (messageContent: string) => void; // Changed from msg to messageContent for clarity
   onSendButton: () => void;
   isLoading: boolean;
   inputFocused: boolean;

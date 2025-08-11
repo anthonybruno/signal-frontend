@@ -23,11 +23,11 @@ export function MCPToolIndicator({ tools }: MCPToolIndicatorProps) {
         <div className="flex flex-col gap-1">
           <div className="rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-sm">
             <div className="flex flex-col gap-2">
-              {tools.map((tool, index) => (
-                <div key={index} className="flex items-center gap-2 text-sm text-gray-600">
+              {tools.map((toolName, toolIndex) => ( // Changed from tool to toolName and index to toolIndex for clarity
+                <div key={toolIndex} className="flex items-center gap-2 text-sm text-gray-600">
                   <Wrench size={14} className="animate-pulse text-blue-500" />
                   <span className="font-medium">MCP Tool:</span>
-                  <span className="font-mono text-blue-600">{tool}</span>
+                  <span className="font-mono text-blue-600">{toolName}</span> {/* Changed from tool to toolName */}
                 </div>
               ))}
             </div>
