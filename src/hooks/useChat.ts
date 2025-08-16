@@ -1,7 +1,10 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 
 import { ChatService } from '@/services/chatService';
 import type { Message } from '@/types';
+import { createMessage } from '@/utils/message';
+
+import { useChatState } from './useChatState';
 
 interface UseChatReturn {
   messages: Message[];
@@ -11,82 +14,62 @@ interface UseChatReturn {
 }
 
 export function useChat(): UseChatReturn {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const {
+    messages,
+    isLoading,
+    hasSubmitted,
+    updateChat,
+    handleStreamingChunk,
+    setLoading,
+    setHasSubmitted,
+  } = useChatState();
 
   const sendMessage = useCallback(
-    async (messageContent: string) => {
-      // Changed from content to messageContent for clarity
-      if (!messageContent.trim() || isLoading) return;
+    async (content: string) => {
+      if (!content.trim() || isLoading) return;
+
       if (!hasSubmitted) setHasSubmitted(true);
 
-      // Add user message immediately
-      const userMessage = ChatService.createUserMessage(messageContent);
-      setMessages((prev) => [...prev, userMessage]);
-      setIsLoading(true);
-
-      // Create assistant message that will be updated as it streams
-      const assistantMessageId = (Date.now() + 1).toString();
-      let hasStartedStreaming = false;
-      let streamedContent = '';
+      updateChat('add', createMessage('user', content));
+      setLoading(true);
 
       try {
         await ChatService.streamChat(
           {
-            message: messageContent,
+            message: content,
             conversationHistory: messages.map((msg) => ({
               role: msg.role,
               content: msg.content,
             })),
           },
-          (chunk, mcpTool) => {
-            // Changed from mcp_tool to mcpTool
-            streamedContent += chunk;
-
-            if (!hasStartedStreaming) {
-              const assistantMessage = ChatService.createAssistantMessage(
-                streamedContent,
-                mcpTool, // Changed from mcp_tool to mcpTool
-              );
-              assistantMessage.id = assistantMessageId;
-              setMessages((prev) => [...prev, assistantMessage]);
-              hasStartedStreaming = true;
-            } else {
-              setMessages((prev) =>
-                prev.map((msg) =>
-                  msg.id === assistantMessageId
-                    ? { ...msg, content: streamedContent }
-                    : msg,
-                ),
-              );
-            }
-          },
-          (error) => {
-            console.error('Chat stream error:', error);
-            const errorMessage = ChatService.createErrorMessage();
-            errorMessage.id = assistantMessageId;
-            setMessages((prev) => [...prev, errorMessage]);
-          },
-          () => {
-            setIsLoading(false);
+          {
+            onChunk: (chunk, mcpTool) => {
+              handleStreamingChunk(chunk, mcpTool);
+            },
+            onError: () =>
+              updateChat(
+                'add',
+                createMessage('system', 'Connection error occurred'),
+              ),
+            onComplete: () => undefined,
           },
         );
       } catch {
-        const errorMessage = ChatService.createErrorMessage();
-        errorMessage.id = assistantMessageId;
-        setMessages((prev) => [...prev, errorMessage]);
+        updateChat('add', createMessage('system', 'Connection error occurred'));
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     },
-    [isLoading, messages, hasSubmitted],
+    [
+      isLoading,
+      messages,
+      hasSubmitted,
+      updateChat,
+      handleStreamingChunk,
+      setLoading,
+      setHasSubmitted,
+    ],
   );
 
-  return {
-    messages,
-    isLoading,
-    sendMessage,
-    hasSubmitted,
-  };
+  return { messages, isLoading, sendMessage, hasSubmitted };
 }

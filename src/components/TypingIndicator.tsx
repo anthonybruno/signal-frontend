@@ -1,5 +1,3 @@
-'use client';
-
 function TypingIndicator() {
   return (
     <div className="flex w-full items-center">

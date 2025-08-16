@@ -1,10 +1,13 @@
+import { ChatProvider } from '@/contexts/ChatContext';
+
 import type { Metadata } from 'next';
 
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Signal',
-  description: 'An AI-powered intro to Anthony Bruno',
+  title: 'Signal · Anthony Bruno · Engineering Manager · Denver, CO',
+  description:
+    'Signal is a guided way to learn about my projects, processes, and principles through an interactive experience.',
   robots: {
     index: false,
     follow: false,
@@ -12,10 +15,6 @@ export const metadata: Metadata = {
     googleBot: {
       index: false,
       follow: false,
-      noimageindex: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
     },
   },
   icons: {
@@ -35,8 +34,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="flex h-screen flex-col border-t-4 border-emerald-500 bg-neutral-100 text-neutral-800">
-        {children}
+      <body className="flex h-screen flex-col bg-neutral-100 text-neutral-800">
+        <ChatProvider>{children}</ChatProvider>
       </body>
     </html>
   );

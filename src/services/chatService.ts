@@ -1,13 +1,8 @@
-import type { Message } from '@/types';
+// ChatService handles HTTP communication and stream processing only
 
 export interface ChatStreamResponse {
   type: 'tools_starting' | 'chunk' | 'done' | 'error';
-  data?:
-    | string
-    | {
-        tool?: string;
-        message?: string;
-      };
+  data?: string | { tool?: string } | { message?: string };
 }
 
 export interface ChatRequest {
@@ -18,14 +13,45 @@ export interface ChatRequest {
   }>;
 }
 
+export interface StreamCallbacks {
+  onChunk: (content: string, mcpTool?: string) => void;
+  onError: (error: string) => void;
+  onComplete: () => void;
+}
+
 export class ChatService {
   private static readonly STREAM_ENDPOINT = `${process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:3000'}/chat`;
 
+  private static handleToolsStarting(data: unknown): string | undefined {
+    if (data && typeof data === 'object' && 'tool' in data) {
+      return String(data.tool);
+    }
+    return undefined;
+  }
+
+  private static handleChunk(
+    data: unknown,
+    mcpTool: string | undefined,
+    onChunk: (content: string, mcpTool?: string) => void,
+  ): void {
+    if (typeof data === 'string') {
+      onChunk(data, mcpTool);
+    }
+  }
+
+  private static handleError(data: unknown): never {
+    let errorMessage = 'Stream error occurred';
+
+    if (data && typeof data === 'object' && 'message' in data) {
+      errorMessage = String(data.message);
+    }
+
+    throw new Error(errorMessage);
+  }
+
   static async streamChat(
     request: ChatRequest,
-    onChunk: (content: string, mcpTool?: string) => void,
-    onError: (error: string) => void,
-    onComplete: () => void,
+    callbacks: StreamCallbacks,
   ): Promise<void> {
     try {
       const response = await fetch(ChatService.STREAM_ENDPOINT, {
@@ -61,34 +87,25 @@ export class ChatService {
             const parsed: ChatStreamResponse = JSON.parse(line);
 
             switch (parsed.type) {
-              case 'tools_starting':
-                if (typeof parsed.data === 'object' && parsed.data.tool) {
-                  mcpTool = parsed.data.tool;
-                }
+              case 'tools_starting': {
+                const tool = ChatService.handleToolsStarting(parsed.data);
+                if (tool) mcpTool = tool;
                 break;
+              }
               case 'chunk':
-                if (typeof parsed.data === 'string') {
-                  onChunk(parsed.data, mcpTool);
-                } else if (
-                  typeof parsed.data === 'object' &&
-                  parsed.data.message
-                ) {
-                  onChunk(parsed.data.message, mcpTool);
-                }
+                ChatService.handleChunk(
+                  parsed.data,
+                  mcpTool,
+                  callbacks.onChunk,
+                );
                 break;
               case 'done':
-                onComplete();
+                callbacks.onComplete();
                 return;
-              case 'error': {
-                const errorMessage =
-                  typeof parsed.data === 'string'
-                    ? parsed.data
-                    : (parsed.data?.message ?? 'Stream error occurred');
-                throw new Error(errorMessage);
-              }
+              case 'error':
+                ChatService.handleError(parsed.data);
             }
           } catch {
-            // Skip invalid JSON lines
             continue;
           }
         }
@@ -96,35 +113,7 @@ export class ChatService {
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error occurred';
-      onError(errorMessage);
+      callbacks.onError(errorMessage);
     }
-  }
-
-  static createUserMessage(content: string): Message {
-    return {
-      id: Date.now().toString(),
-      role: 'user',
-      content: content.trim(),
-      timestamp: new Date(),
-    };
-  }
-
-  static createAssistantMessage(content: string, mcpTool?: string): Message {
-    return {
-      id: (Date.now() + 1).toString(),
-      role: 'assistant',
-      content,
-      timestamp: new Date(),
-      mcpTool: mcpTool ?? undefined,
-    };
-  }
-
-  static createErrorMessage(): Message {
-    return {
-      id: (Date.now() + 1).toString(),
-      role: 'assistant',
-      content: 'Connection error occurred',
-      timestamp: new Date(),
-    };
   }
 }

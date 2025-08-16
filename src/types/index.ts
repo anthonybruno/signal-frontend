@@ -1,24 +1,19 @@
 // Frontend-specific message interface
 export interface Message {
   id: string;
-  role: 'user' | 'assistant';
+  role: 'user' | 'system';
   content: string;
-  timestamp: Date;
-  mcpTool?: string; // Changed from mcp_tool to mcpTool for consistency
+  mcpTool?: string;
 }
 
 // Frontend Component Types
 export interface QuickActionButtonProps {
-  type?: 'quick-action' | 'floating';
+  isPlain?: boolean;
   label: string;
-  icon: React.ComponentType<{ className?: string; size?: number; strokeWidth?: number }>;
+  icon: React.ComponentType<{
+    className?: string;
+    size?: number;
+    strokeWidth?: number;
+  }>;
   onClick: () => void;
-}
-
-// Error Types
-export interface APIError {
-  code: string;
-  message: string;
-  details?: Record<string, unknown>;
-  timestamp: Date;
 }

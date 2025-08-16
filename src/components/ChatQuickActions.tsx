@@ -1,5 +1,3 @@
-'use client';
-
 import {
   CircleUser,
   AudioLines,
@@ -10,29 +8,33 @@ import {
   Briefcase,
   TrendingUp,
 } from 'lucide-react';
-import QuickActionButton from './QuickActionButton';
 
-interface QuickActionsProps {
-  onQuickAction: (questionText: string) => void; // Changed from question to questionText for clarity
+import QuickActionButton from '@/components/QuickActionButton';
+
+interface ChatQuickActionsProps {
+  onMessageSubmit: (questionText: string) => void;
 }
 
 const QUICK_ACTIONS = [
   {
     id: 'about-this',
     label: 'About',
-    question: 'Tell me about your background and what drives you professionally',
+    question:
+      'Tell me about your background and what drives you professionally',
     icon: CircleUser,
   },
   {
     id: 'leadership-management',
     label: 'Leadership',
-    question: "What's your management philosophy and how do you approach team leadership?",
+    question:
+      "What's your management philosophy and how do you approach team leadership?",
     icon: Handshake,
   },
   {
     id: 'notable-projects',
     label: 'Projects',
-    question: 'Tell me about your most significant projects and their business impact',
+    question:
+      'Tell me about your most significant projects and their business impact',
     icon: Briefcase,
   },
   {
@@ -68,20 +70,19 @@ const QUICK_ACTIONS = [
   },
 ];
 
-function QuickActions({ onQuickAction }: QuickActionsProps) {
+function ChatQuickActions({ onMessageSubmit }: ChatQuickActionsProps) {
   return (
-    <div className="flex flex-wrap space-x-2">
+    <div className="flex flex-wrap gap-2">
       {QUICK_ACTIONS.map((action) => (
         <QuickActionButton
           key={action.id}
-          type="quick-action"
           label={action.label}
           icon={action.icon}
-          onClick={() => onQuickAction(action.question)}
+          onClick={() => onMessageSubmit(action.question)}
         />
       ))}
     </div>
   );
 }
 
-export default QuickActions;
+export default ChatQuickActions;

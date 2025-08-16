@@ -8,20 +8,17 @@
     "dev": "next dev -p 4000",
     "build": "next build",
     "start": "next start -p 4000",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
   "dependencies": {
-    "axios": "^1.9.0",
-    "clsx": "^2.1.1",
     "lucide-react": "^0.513.0",
     "next": "15.3.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-markdown": "^10.1.0",
-    "remark-gfm": "^4.0.1",
-    "tailwind-merge": "^3.3.0",
-    "zod": "^3.25.51"
+    "react-markdown": "^10.1.0"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^19.8.1",
@@ -32,12 +29,12 @@
     "@types/react-dom": "^19",
     "@typescript-eslint/eslint-plugin": "^8.39.1",
     "@typescript-eslint/parser": "^8.39.1",
-    "abruno-dev-config": "^1.0.7",
+    "abruno-dev-config": "^1.0.9",
     "commitlint": "^19.8.1",
     "eslint": "^9.33.0",
+    "eslint-config-next": "^15.4.6",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.5",
     "prettier": "^3.6.2",
