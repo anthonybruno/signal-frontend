@@ -1,18 +1,18 @@
-# To-do
-
-- [ ] Update npm scripts in Readme
-
 # Signal Frontend
 
 [![Next.js](https://img.shields.io/badge/Next.js-15-black.svg)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.0+-38B2AC.svg)](https://tailwindcss.com/)
 
-[Signal's](https://github.com/anthonybruno/signal) frontend chat interface that provides a conversational experience for exploring my portfolio, experience, and technical background.
+[Signal's](https://github.com/anthonybruno/signal) frontend chat interface that provides a
+conversational experience for exploring my portfolio, experience, and technical background.
 
 ## What it does
 
-This Next.js frontend is the user-facing layer of Signal. It provides a clean, responsive interface for interacting with the LLM, streaming responses, and triggering MCP actions. Designed for clarity, speed, and polish, it showcases thoughtful UX patterns and production-ready engineering. This repo reflects real-world front-end leadership and implementation at the portfolio level.
+This Next.js frontend is the user-facing layer of Signal. It provides a clean, responsive interface
+for interacting with the LLM, streaming responses, and triggering MCP actions. Designed for clarity,
+speed, and polish, it showcases thoughtful UX patterns and production-ready engineering. This repo
+reflects real-world front-end leadership and implementation at the portfolio level.
 
 **Key Features:**
 
@@ -35,23 +35,31 @@ npm install
 npm run dev
 ```
 
-- **URL**: http://localhost:3000
+- **URL**: http://localhost:4000
 
 ## Tech Stack
 
 - Next.js 15 with React 19
 - TypeScript
 - Tailwind CSS
-- Axios for API calls
 - React Markdown for message rendering
+- Lucide React for icons
+- Tailwind CSS Typography plugin
 
 ## Architecture Notes
 
 ### Integration Points
 
 - Backend API: Handles chat requests and streaming responses
-- MCP Server: Provides live data integration
-- RAG Server: Supplies personal context and knowledge
+- MCP Tools: Integrated through chat streaming interface for live data
+
+### Component Overview
+
+- **ChatInterface**: Main chat container with message history
+- **ChatBubble**: Individual message display with markdown support
+- **ChatTextInput**: User input field for messages
+- **ChatQuickActions**: Quick action buttons for common queries
+- **WelcomeScreen**: Initial greeting and conversation starter
 
 ## Development Workflow
 
@@ -61,13 +69,14 @@ npm run build        # Build for production
 npm run start        # Start production server
 npm run lint         # Run ESLint
 npm run lint:fix     # Fix linting issues
-npm run type-check   # Type-check TypeScript
 npm run format       # Format code with Prettier
 ```
 
 ## Signal Context
 
-This frontend demonstrates modern React patterns, responsive design, and real-time user experience. As part of a broader portfolio, it showcases full-stack development, API integration, and thoughtful UI/UX design.
+This frontend demonstrates modern React patterns, responsive design, and real-time user experience.
+As part of a broader portfolio, it showcases full-stack development, API integration, and thoughtful
+UI/UX design.
 
 - **Additional Info**: [Signal Repo](https://github.com/anthonybruno/signal)
 - **Live Site**: [signal.abruno.net](https://signal.abruno.net)
