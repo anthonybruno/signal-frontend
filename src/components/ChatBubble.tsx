@@ -15,8 +15,8 @@ function ChatBubble({ message }: ChatBubbleProps) {
       data-role={message.role}
       className={`rounded-xl px-4 py-2 ${
         isUser
-          ? 'bg-emerald-600 text-white'
-          : 'bg-neutral-200 dark:bg-neutral-900'
+          ? 'rounded-tr-none bg-emerald-600 text-white'
+          : 'rounded-tl-none bg-neutral-200 dark:bg-neutral-900'
       }`}
     >
       <div
