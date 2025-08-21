@@ -1,21 +1,16 @@
 import type { QuickActionButtonProps } from '@/types';
 
 function QuickActionButton({
-  isPlain = false,
   label,
   icon: Icon,
   onClick,
 }: QuickActionButtonProps) {
   return (
     <button
-      className={`inline-flex items-center text-sm font-medium text-neutral-500 transition-colors hover:border-neutral-400 hover:text-neutral-700 focus:outline-none active:bg-gray-100 ${
-        isPlain
-          ? 'fixed top-4 right-4 p-2'
-          : 'rounded-lg border border-neutral-300 px-2 py-1.5'
-      }`}
+      className="border-tony-300 dark:border-tony-500 text-tony-500 dark:text-tony-300 hover:border-tony-400 hover:text-tony-700 dark:hover:text-tony-200 inline-flex cursor-pointer items-center rounded-full border px-2 py-1.5 text-sm font-medium transition-colors focus:outline-none active:bg-gray-100"
       onClick={onClick}
     >
-      <Icon strokeWidth={2.5} className="mr-1 h-4 w-4" aria-hidden="true" />
+      <Icon strokeWidth={2} className="mr-1 h-4 w-4" aria-hidden="true" />
       {label}
     </button>
   );

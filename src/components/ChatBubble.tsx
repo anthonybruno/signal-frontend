@@ -13,29 +13,24 @@ function ChatBubble({ message }: ChatBubbleProps) {
   return (
     <div
       data-role={message.role}
-      className={`rounded-xl px-4 py-2 ${
-        isUser
-          ? 'rounded-tr-none bg-emerald-600 text-white'
-          : 'rounded-tl-none bg-neutral-200 dark:bg-neutral-900'
-      }`}
+      className={isUser ? 'bg-tony-mint rounded-full px-4 py-2 text-white' : ''}
     >
-      <div
-        className={`break-words ${
-          isUser
-            ? ''
-            : 'prose prose-headings:font-medium prose-h1:text-xl prose-a:text-emerald-600'
-        }`}
-      >
-        <ReactMarkdown>{message.content}</ReactMarkdown>
-      </div>
-
       {message.mcpTool ? (
         <div className="flex items-center gap-2 pt-1 text-sm">
           <Wrench strokeWidth={2.25} size={14} />
           <span>MCP used:</span>
-          <span className="font-mono text-emerald-600">{message.mcpTool}</span>
+          <span className="text-tony-mint font-mono">{message.mcpTool}</span>
         </div>
       ) : null}
+      <div
+        className={`break-words ${
+          isUser
+            ? ''
+            : 'prose prose-headings:font-medium prose-headings:text-xl prose-headings:my-3'
+        }`}
+      >
+        <ReactMarkdown>{message.content}</ReactMarkdown>
+      </div>
     </div>
   );
 }

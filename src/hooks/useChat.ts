@@ -46,17 +46,20 @@ export function useChat(): UseChatReturn {
             onChunk: (chunk, mcpTool) => {
               handleStreamingChunk(chunk, mcpTool);
             },
-            onError: () =>
+            onError: () => {
               updateChat(
                 'add',
                 createMessage('system', 'Connection error occurred'),
-              ),
-            onComplete: () => undefined,
+              );
+              setLoading(false);
+            },
+            onComplete: () => {
+              setLoading(false);
+            },
           },
         );
       } catch {
         updateChat('add', createMessage('system', 'Connection error occurred'));
-      } finally {
         setLoading(false);
       }
     },

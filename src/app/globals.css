@@ -10,16 +10,66 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    @apply bg-black text-white;
-  }
-}
-
 @theme {
+  --color-tony-mint: #00966d;
+  --color-tony-mint-hover: #007a59;
+  --color-tony-blueberry: #3366ff;
+  --color-tony-blueberry-hover: #254ed9;
+  --color-tony-cherry: #d32f2f;
+  --color-tony-cherry-hover: #aa2424;
+  --color-tony-off-white: #f7f4f2;
+  --color-tony-100: #fffcfa;
+  --color-tony-200: #ede9e6;
+  --color-tony-300: #b0aaa7;
+  --color-tony-400: #8b8582;
+  --color-tony-500: #635e5b;
+  --color-tony-600: #44403d;
+  --color-tony-700: #2b2b2b;
+  --color-tony-800: #1f1f1f;
+
   --font-sans: 'system-ui', sans-serif;
   --gap-chat-message: 16px;
+}
+
+@layer utilities {
+  .prose {
+    --tw-prose-body: var(--color-tony-700);
+    --tw-prose-headings: var(--color-tony-700);
+    --tw-prose-lead: var(--color-tony-500);
+    --tw-prose-links: var(--color-tony-mint);
+    --tw-prose-bold: var(--color-tony-700);
+    --tw-prose-counters: var(--color-tony-500);
+    --tw-prose-bullets: var(--color-tony-500);
+    --tw-prose-hr: var(--color-tony-200);
+    --tw-prose-quotes: var(--color-tony-700);
+    --tw-prose-quote-borders: var(--color-tony-500);
+    --tw-prose-captions: var(--color-tony-700);
+    --tw-prose-code: var(--color-tony-700);
+    --tw-prose-pre-code: var(--color-tony-800);
+    --tw-prose-pre-bg: var(--color-tony-200);
+    --tw-prose-th-borders: var(--color-tony-300);
+    --tw-prose-td-borders: var(--color-tony-200);
+  }
+
+  /* Dark mode prose styles */
+  @media (prefers-color-scheme: dark) {
+    .prose {
+      --tw-prose-body: var(--color-tony-200);
+      --tw-prose-headings: var(--color-tony-100);
+      --tw-prose-lead: var(--color-tony-300);
+      --tw-prose-links: var(--color-tony-mint);
+      --tw-prose-bold: var(--color-tony-100);
+      --tw-prose-counters: var(--color-tony-400);
+      --tw-prose-bullets: var(--color-tony-600);
+      --tw-prose-hr: var(--color-tony-700);
+      --tw-prose-quotes: var(--color-tony-100);
+      --tw-prose-quote-borders: var(--color-tony-700);
+      --tw-prose-captions: var(--color-tony-400);
+      --tw-prose-code: var(--color-tony-100);
+      --tw-prose-pre-code: var(--color-tony-300);
+      --tw-prose-pre-bg: rgb(0 0 0 / 50%);
+      --tw-prose-th-borders: var(--color-tony-600);
+      --tw-prose-td-borders: var(--color-tony-700);
+    }
+  }
 }

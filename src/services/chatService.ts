@@ -101,7 +101,7 @@ export class ChatService {
                 break;
               case 'done':
                 callbacks.onComplete();
-                return;
+                break;
               case 'error':
                 ChatService.handleError(parsed.data);
             }
