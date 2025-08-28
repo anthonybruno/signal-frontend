@@ -37,7 +37,7 @@ export function useChat(): UseChatReturn {
         await ChatService.streamChat(
           {
             message: content,
-            conversationHistory: messages.map((msg) => ({
+            history: messages.map((msg) => ({
               role: msg.role,
               content: msg.content,
             })),

@@ -7,7 +7,7 @@ export interface ChatStreamResponse {
 
 export interface ChatRequest {
   message: string;
-  conversationHistory: Array<{
+  history: Array<{
     role: string;
     content: string;
   }>;
