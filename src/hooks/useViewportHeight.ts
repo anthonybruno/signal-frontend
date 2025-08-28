@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 
 /**
  * Hook for managing viewport height and calculating message container heights
@@ -9,47 +15,45 @@ export function useViewportHeight() {
   const [viewportHeight, setViewportHeight] = useState(0);
   const [lastTwoMessagesHeight, setLastTwoMessagesHeight] = useState(0);
 
-  const getChatMessageGap = useCallback((): number => {
-    const rootStyles = getComputedStyle(document.documentElement);
-    const gap = rootStyles.getPropertyValue('--gap-chat-message');
-    return parseInt(gap) || 0;
-  }, []);
+  // Use ref to track current height without triggering re-renders
+  const currentHeightRef = useRef(0);
 
-  const calculateMessageHeights = useCallback((): number => {
-    if (!messagesContainerRef.current) return 0;
+  const calculateLastTwoMessagesHeight = useCallback(() => {
+    if (!messagesContainerRef.current) return;
 
     const children = Array.from(messagesContainerRef.current.children);
     const lastTwo = children.slice(-3, -1);
 
-    return lastTwo.reduce(
-      (sum, child) => sum + (child as HTMLElement).offsetHeight,
-      0,
+    if (lastTwo.length === 0) return;
+
+    const totalHeight = lastTwo.reduce((sum, child) => {
+      return sum + (child as HTMLElement).offsetHeight;
+    }, 0);
+
+    const rootStyles = getComputedStyle(document.documentElement);
+    const messageGap = parseInt(
+      rootStyles.getPropertyValue('--gap-chat-message'),
     );
+    const topPadding = parseInt(
+      rootStyles.getPropertyValue('--gap-chat-message'),
+    );
+
+    const newHeight = totalHeight + messageGap * 2 + topPadding;
+
+    // Only update state if height actually changed significantly
+    if (Math.abs(newHeight - currentHeightRef.current) > 5) {
+      currentHeightRef.current = newHeight;
+      setLastTwoMessagesHeight(newHeight);
+    }
   }, []);
-
-  const calculateMessageSpacing = useCallback(
-    (messageCount: number): number => {
-      const gap = getChatMessageGap();
-      const gapHeight = messageCount > 1 ? gap * 2 : gap;
-      return gapHeight + gap;
-    },
-    [getChatMessageGap],
-  );
-
-  const calculateLastTwoMessagesHeight = useCallback(() => {
-    const messageHeight = calculateMessageHeights();
-    const messageCount = Math.min(
-      2,
-      messagesContainerRef.current?.children.length || 0,
-    );
-    const spacing = calculateMessageSpacing(messageCount);
-
-    setLastTwoMessagesHeight(messageHeight + spacing);
-  }, [calculateMessageHeights, calculateMessageSpacing]);
 
   const updateViewportHeight = useCallback(() => {
     setViewportHeight(window.innerHeight);
   }, []);
+
+  useLayoutEffect(() => {
+    calculateLastTwoMessagesHeight();
+  });
 
   useEffect(() => {
     updateViewportHeight();
@@ -58,7 +62,7 @@ export function useViewportHeight() {
     window.addEventListener('resize', updateViewportHeight);
 
     return () => window.removeEventListener('resize', updateViewportHeight);
-  }, [updateViewportHeight, calculateLastTwoMessagesHeight]);
+  }, [updateViewportHeight]);
 
   return {
     messagesContainerRef,

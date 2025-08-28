@@ -9,7 +9,6 @@ import {
   Briefcase,
   TrendingUp,
 } from 'lucide-react';
-import { useEffect } from 'react';
 
 import ChatBubble from '@/components/ChatBubble';
 import InputContainer from '@/components/InputContainer';
@@ -81,19 +80,10 @@ export default function ChatInterface() {
     setInputFocusState,
   } = useChatContext();
 
-  const {
-    messagesContainerRef,
-    viewportHeight,
-    lastTwoMessagesHeight,
-    calculateLastTwoMessagesHeight,
-  } = useViewportHeight();
+  const { messagesContainerRef, viewportHeight, lastTwoMessagesHeight } =
+    useViewportHeight();
 
   const { handleMessageSubmit } = useMessageHandlers(sendMessage);
-
-  useEffect(() => {
-    // Recalculate heights when messages or loading state changes
-    calculateLastTwoMessagesHeight();
-  }, [messages, isLoading, calculateLastTwoMessagesHeight]);
 
   return (
     <>
@@ -165,7 +155,7 @@ export default function ChatInterface() {
                 key={action.label}
                 label={action.label}
                 icon={action.icon}
-                onClick={() => void sendMessage(action.question)}
+                onClick={() => void handleMessageSubmit(action.question)}
               />
             ))}
           </InputContainer>

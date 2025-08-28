@@ -26,7 +26,7 @@ const InputContainer: React.FC<InputContainerProps> = ({
   children,
 }) => (
   <div
-    className={`border-tony-300 hover:border-tony-400 dark:hover:border-tony-200 dark:bg-tony-700/50 relative mx-auto mb-4 w-full max-w-4xl border-1 bg-white p-4 transition-colors hover:shadow dark:hover:shadow-none ${children ? 'rounded-2xl' : 'flex items-center rounded-full'} ${isInputFocused ? 'border-tony-400 shadow' : ''}`}
+    className={`border-tony-300 hover:border-tony-400 dark:hover:border-tony-200 dark:bg-tony-700 relative mx-auto mb-4 w-full max-w-4xl border-1 bg-white p-4 transition-colors hover:shadow dark:border-none dark:hover:shadow-none ${children ? 'rounded-2xl' : 'flex items-center rounded-full'} ${isInputFocused ? 'border-tony-400 shadow' : ''}`}
   >
     <ChatTextInput
       message={message}
