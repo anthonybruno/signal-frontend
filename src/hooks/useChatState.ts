@@ -44,7 +44,7 @@ export function useChatState(): UseChatStateReturn {
           // Append to the existing message content for streaming
           newMessages[index] = {
             ...newMessages[index],
-            content: prev[index].content + message.content,
+            content: (prev[index].content || '') + (message.content || ''),
           };
           return newMessages;
         }
