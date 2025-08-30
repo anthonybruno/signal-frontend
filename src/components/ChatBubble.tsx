@@ -1,7 +1,8 @@
 import { Wrench } from 'lucide-react';
-import { memo } from 'react';
+import { memo, useRef, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
+import { useViewportWidth } from '@/hooks/useViewportWidth';
 import type { Message } from '@/types';
 
 interface ChatBubbleProps {
@@ -10,6 +11,23 @@ interface ChatBubbleProps {
 
 function ChatBubble({ message }: ChatBubbleProps) {
   const isUser = message.role === 'user';
+  const textRef = useRef<HTMLDivElement>(null);
+  const [isMultiLine, setIsMultiLine] = useState(false);
+  const { viewportWidth } = useViewportWidth();
+
+  const checkMultiLine = () => {
+    if (textRef.current) {
+      const element = textRef.current;
+      const lineHeight = parseInt(getComputedStyle(element).lineHeight);
+      const height = element.scrollHeight;
+      setIsMultiLine(height > lineHeight);
+    }
+  };
+
+  useEffect(() => {
+    checkMultiLine();
+  }, [message.content, viewportWidth]);
+
   return (
     <div
       className={`flex w-full ${
@@ -18,7 +36,11 @@ function ChatBubble({ message }: ChatBubbleProps) {
     >
       <div
         className={
-          isUser ? 'bg-tony-mint rounded-full px-4 py-2 text-white' : ''
+          isUser
+            ? `bg-tony-mint px-4 py-2 text-white ${
+                isMultiLine ? 'rounded-2xl' : 'rounded-full'
+              }`
+            : ''
         }
       >
         {message.mcpTool ? (
@@ -29,6 +51,7 @@ function ChatBubble({ message }: ChatBubbleProps) {
           </div>
         ) : null}
         <div
+          ref={textRef}
           className={`text-pretty break-words ${
             isUser
               ? ''
