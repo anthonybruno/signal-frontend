@@ -9,14 +9,15 @@ import {
   Briefcase,
   TrendingUp,
 } from 'lucide-react';
+import { useCallback, useRef } from 'react';
 
 import ChatBubble from '@/components/ChatBubble';
 import InputContainer from '@/components/InputContainer';
 import QuickActionButton from '@/components/QuickActionButton';
-import TypingIndicator from '@/components/TypingIndicator';
 import { useChatContext } from '@/contexts/ChatContext';
-import { useMessageHandlers } from '@/hooks/useMessageHandlers';
-import { useViewportHeight } from '@/hooks/useViewportHeight';
+import { useViewportWidth } from '@/hooks/useViewportWidth';
+
+import TypingIndicator from './TypingIndicator';
 
 const QUICK_ACTIONS = [
   {
@@ -67,7 +68,6 @@ const QUICK_ACTIONS = [
 
 /**
  * Main chat interface component that displays messages and handles user input
- * Manages viewport sizing and scroll behavior for optimal chat experience
  */
 export default function ChatInterface() {
   const {
@@ -76,63 +76,61 @@ export default function ChatInterface() {
     message,
     setMessage,
     sendMessage,
-    isInputFocused,
     setInputFocusState,
   } = useChatContext();
 
-  const { messagesContainerRef, viewportHeight, lastTwoMessagesHeight } =
-    useViewportHeight();
+  const { isMinWidth } = useViewportWidth();
+  const messagesRef = useRef<HTMLDivElement>(null);
 
-  const { handleMessageSubmit } = useMessageHandlers(sendMessage);
+  const handleMessageSubmit = useCallback(
+    (msg: string) => {
+      sendMessage(msg).catch((error) => {
+        console.error('Failed to send message:', error);
+      });
+    },
+    [sendMessage],
+  );
 
   return (
     <>
-      <div className="min-h-screen pt-4">
-        <div
-          ref={messagesContainerRef}
-          className="gap-chat-message mx-auto flex max-w-4xl flex-col"
-        >
-          {messages.map((message) => (
-            <AnimatePresence key={message.id}>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.4, ease: 'easeInOut' }}
-                className={`flex w-full ${
-                  message.role === 'user' ? 'justify-end' : 'justify-start'
-                }`}
-              >
-                <ChatBubble message={message} />
-              </motion.div>
-            </AnimatePresence>
-          ))}
-
+      <div className="relative mx-auto flex min-h-screen max-w-4xl flex-col px-4">
+        <div className="relative">
           <AnimatePresence>
             {isLoading ? (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                transition={{ duration: 0.4, ease: 'easeInOut' }}
-              >
-                <TypingIndicator />
-              </motion.div>
+              <div className="absolute bottom-0 w-full">
+                <motion.div
+                  id="typing-indicator"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 25 }}
+                  exit={{ opacity: 0, y: 30 }}
+                  transition={{ duration: 0.4, ease: 'easeInOut' }}
+                >
+                  <TypingIndicator />
+                </motion.div>
+              </div>
             ) : null}
           </AnimatePresence>
 
-          <div
-            aria-hidden="true"
-            className="min-h-[160px]"
-            style={{
-              height: `${viewportHeight - lastTwoMessagesHeight}px`,
-            }}
-          />
+          <div ref={messagesRef}>
+            {messages.map((message) => (
+              <AnimatePresence key={message.id}>
+                <div
+                  id={message.id}
+                  className={`flex w-full ${
+                    message.role === 'user' ? 'justify-end' : 'justify-start'
+                  }`}
+                >
+                  <ChatBubble message={message} />
+                </div>
+              </AnimatePresence>
+            ))}
+          </div>
         </div>
       </div>
+
       <AnimatePresence>
         <motion.div
-          className="fixed bottom-0 w-full"
+          className="fixed bottom-0 w-full px-4"
           initial={{ opacity: 0, y: 0 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 10 }}
@@ -146,18 +144,19 @@ export default function ChatInterface() {
             setMessage={setMessage}
             onMessageSubmit={handleMessageSubmit}
             isLoading={isLoading}
-            isInputFocused={isInputFocused}
             setInputFocusState={setInputFocusState}
-            autoFocus
+            autoFocus={isMinWidth(500)}
           >
-            {QUICK_ACTIONS.map((action) => (
-              <QuickActionButton
-                key={action.label}
-                label={action.label}
-                icon={action.icon}
-                onClick={() => void handleMessageSubmit(action.question)}
-              />
-            ))}
+            <div className="hidden flex-1 items-center gap-1 @min-[835px]:flex">
+              {QUICK_ACTIONS.map((action) => (
+                <QuickActionButton
+                  key={action.label}
+                  label={action.label}
+                  icon={action.icon}
+                  onClick={() => void handleMessageSubmit(action.question)}
+                />
+              ))}
+            </div>
           </InputContainer>
         </motion.div>
       </AnimatePresence>

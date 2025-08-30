@@ -63,6 +63,7 @@ function ChatTextInput({
     if (messageText && !isLoading) {
       onMessageSubmit(messageText);
       setMessage('');
+      inputRef.current?.blur();
     }
   };
 
@@ -105,12 +106,12 @@ function ChatTextInput({
           <AnimatePresence mode="wait">
             <motion.div
               key={currentPlaceholderIndex}
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: -10 }}
               animate={{
                 opacity: message || isPaused ? 0 : 1,
                 y: message || 0,
               }}
-              exit={{ opacity: 0, y: -10 }}
+              exit={{ opacity: 0, y: 10 }}
               transition={{
                 duration: 0.6,
                 ease: [0.4, 0.0, 0.2, 1],

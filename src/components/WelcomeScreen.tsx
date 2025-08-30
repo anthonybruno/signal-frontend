@@ -23,37 +23,30 @@ const QUICK_ACTIONS = [
 ];
 
 export default function WelcomeScreen() {
-  const {
-    message,
-    setMessage,
-    sendMessage,
-    isLoading,
-    isInputFocused,
-    setInputFocusState,
-  } = useChatContext();
+  const { message, setMessage, sendMessage, isLoading, setInputFocusState } =
+    useChatContext();
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-dvh flex-col lg:flex-row">
       <div className="flex flex-1 flex-col items-center justify-center px-8 text-center">
-        <h2 className="mb-4 text-4xl font-bold tracking-tight">
+        <h2 className="mb-4 text-4xl font-bold tracking-tight text-balance">
           Static portfolios are boring.
         </h2>
-        <p className="max-w-3/4 text-xl text-pretty">
+        <p className="text-xl text-pretty md:max-w-1/2 lg:max-w-3/4">
           Ask questions, explore projects, and see my career in a way that feels
           more alive.
         </p>
       </div>
-      <div className="flex flex-1 flex-col items-center justify-center bg-white px-8 dark:bg-transparent">
+      <div className="flex flex-col items-center justify-center px-4 md:px-8 lg:flex-1 lg:bg-white dark:bg-transparent">
         <InputContainer
           message={message}
           setMessage={setMessage}
           onMessageSubmit={(msg) => void sendMessage(msg)}
           isLoading={isLoading}
-          isInputFocused={isInputFocused}
           setInputFocusState={setInputFocusState}
           animatedPlaceholders
         />
-        <div className="flex items-center gap-3">
+        <div className="hidden items-center gap-3 pb-3 md:flex">
           {QUICK_ACTIONS.map((action) => (
             <QuickActionButton
               key={action.label}

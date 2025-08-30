@@ -34,7 +34,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-tony-off-white dark:bg-tony-800 text-tony-700 dark:text-tony-100 flex h-screen flex-col">
+      <body className="bg-tony-off-white dark:bg-tony-800 text-tony-700 dark:text-tony-100">
         <ChatProvider>{children}</ChatProvider>
       </body>
     </html>

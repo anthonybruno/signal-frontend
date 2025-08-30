@@ -29,6 +29,7 @@
 
   --font-sans: 'system-ui', sans-serif;
   --gap-chat-message: 16px;
+  --spacing-header: 65px;
 }
 
 @layer utilities {
