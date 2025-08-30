@@ -1,9 +1,26 @@
 {
   "name": "signal-frontend",
   "version": "0.1.0",
-  "private": true,
-  "description": "Signal’s frontend interface for real-time chat and AI-powered interactions.",
+  "description": "The Signal frontend is a Next.js app with React, Tailwind, and TypeScript that renders the chat interface, streams responses, and provides an accessible, responsive user experience.",
+  "keywords": [
+    "portfolio",
+    "frontend",
+    "nextjs",
+    "react",
+    "tailwind",
+    "typescript",
+    "chat",
+    "ai",
+    "signal"
+  ],
+  "author": "Anthony Bruno",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anthonybruno/signal-frontend.git"
+  },
   "type": "module",
+  "main": "src/index.ts",
   "scripts": {
     "dev": "next dev -p 4000",
     "build": "next build",

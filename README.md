@@ -1,82 +1,69 @@
 # Signal Frontend
 
-[![Next.js](https://img.shields.io/badge/Next.js-15-black.svg)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.0+-38B2AC.svg)](https://tailwindcss.com/)
+![Next.js](https://img.shields.io/badge/Next.js-15-000?logo=nextdotjs&logoColor=white&style=flat-square)
+![Tailwind](https://img.shields.io/badge/Tailwind-4-06B6D4?logo=tailwindcss&logoColor=white&style=flat-square)
+![Framer](https://img.shields.io/badge/Framer-Motion-0055FF?logo=framer&logoColor=white&style=flat-square)
 
-[Signal's](https://github.com/anthonybruno/signal) frontend chat interface that provides a
-conversational experience for exploring my portfolio, experience, and technical background.
+### Static portfolios are boring.
+
+The frontend is the entry point to Signal. It renders the chat interface, manages user interaction,
+and streams responses in real time. This service is where the system feels alive — turning backend
+orchestration, RAG memory, and MCP integrations into a usable experience.
 
 ## What it does
 
-This Next.js frontend is the user-facing layer of Signal. It provides a clean, responsive interface
-for interacting with the LLM, streaming responses, and triggering MCP actions. Designed for clarity,
-speed, and polish, it showcases thoughtful UX patterns and production-ready engineering. This repo
-reflects real-world front-end leadership and implementation at the portfolio level.
+The frontend is a Next.js app built with React, Tailwind, and TypeScript. It:
 
-**Key Features:**
+- Provides an **interactive chat interface** for exploring my work and career
+- Streams responses from the backend in real time
+- Displays **context-aware follow-ups** and supporting data
+- Implements a **responsive, accessible UI** with thoughtful component structure
 
-- Real-time AI chat interface
-- Streams LLM responses to users
-- Displays context-aware follow-ups and source data
-- Responsive, accessible UI
+This layer reflects my focus on clean React patterns, accessibility, and developer-friendly
+practices.
 
-## Local Development
+## Architecture overview
 
-### Prerequisites
+![Signal Architecture](https://github.com/user-attachments/assets/9ae777bb-9564-4168-8e72-9ffbc743ae5c)
 
-- Node.js 20+
-- [Backend API](https://github.com/anthonybruno/signal-backend) running locally
+The frontend acts as the user-facing layer, transforming system outputs into a clear, conversational
+experience.
 
-### Setup
+## Tech stack
 
-```bash
-npm install
-npm run dev
-```
+- **Framework:** Next.js 15 with React 19
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS (with Typography plugin)
+- **Rendering:** React Markdown for message content
+- **Icons:** Lucide React
+- **Dev tooling:** ESLint, Prettier, Husky, and shared configs via
+  [dev-config](https://www.npmjs.com/package/abruno-dev-config)
 
-- **URL**: http://localhost:4000
+---
 
-## Tech Stack
+## Local development
 
-- Next.js 15 with React 19
-- TypeScript
-- Tailwind CSS
-- React Markdown for message rendering
-- Lucide React for icons
-- Tailwind CSS Typography plugin
+Signal’s services can be run locally, but setup involves multiple moving parts.  
+For now, the easiest way to explore Signal is the [live demo](https://signal.abruno.net).
 
-## Architecture Notes
+Future work may include a simplified `docker-compose` flow for local development.
 
-### Integration Points
+---
 
-- Backend API: Handles chat requests and streaming responses
-- MCP Tools: Integrated through chat streaming interface for live data
+## Explore
 
-### Component Overview
+- [Overview repo](https://github.com/anthonybruno/signal)
+- [Backend repo](https://github.com/anthonybruno/signal-backend)
+- [RAG repo](https://github.com/anthonybruno/signal-rag)
+- [MCP repo](https://github.com/anthonybruno/signal-mcp)
+- [Live demo](https://signal.abruno.net)
 
-- **ChatInterface**: Main chat container with message history
-- **ChatBubble**: Individual message display with markdown support
-- **ChatTextInput**: User input field for messages
-- **ChatQuickActions**: Quick action buttons for common queries
-- **WelcomeScreen**: Initial greeting and conversation starter
+---
 
-## Development Workflow
+## Signal context
 
-```bash
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run start        # Start production server
-npm run lint         # Run ESLint
-npm run lint:fix     # Fix linting issues
-npm run format       # Format code with Prettier
-```
-
-## Signal Context
-
-This frontend demonstrates modern React patterns, responsive design, and real-time user experience.
-As part of a broader portfolio, it showcases full-stack development, API integration, and thoughtful
-UI/UX design.
-
-- **Additional Info**: [Signal Repo](https://github.com/anthonybruno/signal)
-- **Live Site**: [signal.abruno.net](https://signal.abruno.net)
+The frontend shows how I approach **UX and developer experience in tandem**. By keeping components
+modular, accessible, and responsive, the interface stays maintainable while delivering a polished
+user experience. As part of a multi-service system, it demonstrates how frontend craft connects to
+orchestration, retrieval, and live data. This reflects the kind of collaboration and clarity I
+emphasize as an engineering leader.
