@@ -3,6 +3,8 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 
+import { useViewportWidth } from '../hooks/useViewportWidth';
+
 interface ChatTextInputProps {
   message: string;
   isLoading: boolean;
@@ -27,6 +29,15 @@ function ChatTextInput({
   const [currentPlaceholderIndex, setCurrentPlaceholderIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { viewportWidth } = useViewportWidth();
+
+  const getCSSVariable = (variableName: string): number => {
+    if (typeof window === 'undefined') return 0;
+    const value = getComputedStyle(document.documentElement)
+      .getPropertyValue(variableName)
+      .trim();
+    return parseInt(value);
+  };
 
   const placeholders = [
     'What drives you professionally?',
@@ -63,7 +74,9 @@ function ChatTextInput({
     if (messageText && !isLoading) {
       onMessageSubmit(messageText);
       setMessage('');
-      inputRef.current?.blur();
+      if (viewportWidth < getCSSVariable('--breakpoint-sm')) {
+        inputRef.current?.blur();
+      }
     }
   };
 

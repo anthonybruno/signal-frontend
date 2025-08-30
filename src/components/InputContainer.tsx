@@ -41,6 +41,7 @@ const InputContainer: React.FC<InputContainerProps> = ({
           onClick={() => {
             if (!message.trim() || isLoading) return;
             onMessageSubmit(message);
+            setMessage('');
           }}
           className={`bg-tony-mint hover:bg-tony-mint-hover focus:ring-tony-mint ml-2 flex items-center justify-center rounded-full p-1.5 text-white transition-all hover:cursor-pointer focus:ring-2 focus:ring-offset-2 focus:outline-none ${isLoading || !message.trim() ? 'pointer-events-none opacity-50' : ''}`}
           type="submit"

@@ -117,9 +117,6 @@ export default function ChatInterface() {
                     index === lastMessageGroupIndex ? 'h-screen' : ''
                   }`}
                 >
-                  {/* <div className="text-tony-300 text-sm">
-                    isLast: {String(index === lastMessageGroupIndex)}
-                  </div> */}
                   <div className="flex flex-col gap-4">
                     <AnimatePresence>
                       <motion.div
