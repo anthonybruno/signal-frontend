@@ -1,6 +1,11 @@
 function TypingIndicator() {
   return (
-    <div className="flex w-full items-center">
+    <div
+      className="flex w-full items-center"
+      role="status"
+      aria-live="polite"
+      aria-label="AI is typing a response"
+    >
       <span className="relative flex size-3">
         <span className="bg-tony-mint/75 absolute inline-flex h-full w-full animate-ping rounded-full" />
         <span className="bg-tony-mint relative inline-flex size-3 rounded-full" />

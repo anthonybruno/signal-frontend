@@ -33,6 +33,8 @@ function ChatBubble({ message }: ChatBubbleProps) {
       className={`flex w-full ${
         message.role === 'user' ? 'justify-end' : 'justify-start'
       }`}
+      role="article"
+      aria-label={`${message.role === 'user' ? 'Your message' : 'AI response'}`}
     >
       <div
         className={

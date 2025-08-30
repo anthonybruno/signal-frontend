@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 
 import { useViewportWidth } from '../hooks/useViewportWidth';
@@ -30,6 +30,7 @@ function ChatTextInput({
   const [isPaused, setIsPaused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const { viewportWidth } = useViewportWidth();
+  const shouldReduceMotion = useReducedMotion();
 
   const getCSSVariable = (variableName: string): number => {
     if (typeof window === 'undefined') return 0;
@@ -105,6 +106,7 @@ function ChatTextInput({
       <div className="relative">
         <input
           ref={inputRef}
+          id="chat-message"
           name="message"
           type="text"
           value={message}
@@ -113,6 +115,7 @@ function ChatTextInput({
           onBlur={handleBlur}
           placeholder={animatedPlaceholders ? undefined : 'Ask me anything'}
           enterKeyHint="send"
+          aria-label="Chat message input"
           className="placeholder:text-tony-500 dark:placeholder:text-tony-400 box-border block w-full bg-transparent focus:outline-none"
         />
 
@@ -120,12 +123,14 @@ function ChatTextInput({
           <AnimatePresence mode="wait">
             <motion.div
               key={currentPlaceholderIndex}
-              initial={{ opacity: 0, y: -10 }}
+              initial={
+                shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -10 }
+              }
               animate={{
                 opacity: message || isPaused ? 0 : 1,
                 y: message || 0,
               }}
-              exit={{ opacity: 0, y: 10 }}
+              exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10 }}
               transition={{
                 duration: 0.6,
                 ease: [0.4, 0.0, 0.2, 1],

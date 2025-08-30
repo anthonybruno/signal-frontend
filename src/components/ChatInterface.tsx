@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import {
   CircleUser,
   AudioLines,
@@ -80,7 +80,7 @@ export default function ChatInterface() {
     setInputFocusState,
   } = useChatContext();
   const [messageGroups, setMessageGroups] = useState<MessageGroup[]>([]);
-
+  const shouldReduceMotion = useReducedMotion();
   const lastMessageGroupIndex = messageGroups.length - 1;
   const secondToLastMessageGroupIndex = messageGroups.length - 2;
 
@@ -93,11 +93,17 @@ export default function ChatInterface() {
 
       // Auto-scroll to the last message group
       if (newMessageGroups.length > 0) {
+        const reduceMotion = window.matchMedia(
+          '(prefers-reduced-motion: reduce)',
+        ).matches;
         const lastMessageGroup = newMessageGroups[newMessageGroups.length - 1];
         setTimeout(() => {
           const element = document.getElementById(lastMessageGroup.id);
           if (element) {
-            element.scrollIntoView({ behavior: 'auto', block: 'start' });
+            element.scrollIntoView({
+              behavior: reduceMotion ? 'instant' : 'smooth',
+              block: 'start',
+            });
           }
         }, 100);
       }
@@ -108,7 +114,7 @@ export default function ChatInterface() {
     <>
       <div className="relative mx-auto flex min-h-dvh max-w-4xl flex-col px-4">
         <div className="relative">
-          <div className="flex flex-col">
+          <div className="flex flex-col" aria-live="polite" aria-atomic="false">
             {messageGroups.map((messageGroup, index) => (
               <AnimatePresence key={messageGroup.id}>
                 <motion.div
@@ -148,9 +154,17 @@ export default function ChatInterface() {
                     {isLoading && index === lastMessageGroupIndex ? (
                       <motion.div
                         id="typing-indicator"
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={
+                          shouldReduceMotion
+                            ? { opacity: 0 }
+                            : { opacity: 0, y: 20 }
+                        }
                         animate={{ opacity: 1, y: 20 }}
-                        exit={{ opacity: 0, y: 20 }}
+                        exit={
+                          shouldReduceMotion
+                            ? { opacity: 0 }
+                            : { opacity: 0, y: 20 }
+                        }
                         transition={{ duration: 1, ease: [0.4, 0.0, 0.2, 1] }}
                       >
                         <TypingIndicator />
@@ -178,7 +192,7 @@ export default function ChatInterface() {
           className="fixed bottom-0 w-full px-4"
           initial={{ opacity: 0, y: 0 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 10 }}
+          exit={{ opacity: 0, y: 0 }}
           transition={{
             duration: 0.6,
             ease: [0.4, 0.0, 0.2, 1],
