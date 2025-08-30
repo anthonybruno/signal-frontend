@@ -45,10 +45,10 @@ export function createMessageGroups(messages: Message[]): MessageGroup[] {
     const systemMessagePosition = userMessagePosition + 1;
 
     return {
-      id: `${index}-${generateRandomSuffix()}`,
+      id: `group-${index}`,
       userMessage: messages[userMessagePosition],
       systemMessage: messages[systemMessagePosition] || {
-        id: `${index}-${generateRandomSuffix()}`,
+        id: `system-${index}`,
         role: 'system',
         content: null,
       },
