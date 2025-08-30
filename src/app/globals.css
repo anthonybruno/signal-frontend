@@ -28,11 +28,12 @@
   --color-tony-800: #1f1f1f;
 
   --font-sans: 'system-ui', sans-serif;
-  --gap-chat-message: 16px;
-  --spacing-header: 65px;
 }
 
 @layer utilities {
+  * {
+    scrollbar-color: var(--color-tony-300) var(--color-tony-300);
+  }
   .prose {
     --tw-prose-body: var(--color-tony-700);
     --tw-prose-headings: var(--color-tony-700);
@@ -54,6 +55,9 @@
 
   /* Dark mode prose styles */
   @media (prefers-color-scheme: dark) {
+    * {
+      scrollbar-color: var(--color-tony-500) var(--color-tony-500);
+    }
     .prose {
       --tw-prose-body: var(--color-tony-200);
       --tw-prose-headings: var(--color-tony-100);

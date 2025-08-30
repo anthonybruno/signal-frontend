@@ -2,7 +2,7 @@
 export interface Message {
   id: string;
   role: 'user' | 'system';
-  content: string;
+  content: string | null;
   mcpTool?: string;
 }
 

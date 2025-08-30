@@ -9,15 +9,15 @@ import {
   Briefcase,
   TrendingUp,
 } from 'lucide-react';
-import { useCallback, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 import ChatBubble from '@/components/ChatBubble';
 import InputContainer from '@/components/InputContainer';
 import QuickActionButton from '@/components/QuickActionButton';
+import TypingIndicator from '@/components/TypingIndicator';
 import { useChatContext } from '@/contexts/ChatContext';
 import { useViewportWidth } from '@/hooks/useViewportWidth';
-
-import TypingIndicator from './TypingIndicator';
+import { createMessageGroups, type MessageGroup } from '@/utils/message';
 
 const QUICK_ACTIONS = [
   {
@@ -70,6 +70,7 @@ const QUICK_ACTIONS = [
  * Main chat interface component that displays messages and handles user input
  */
 export default function ChatInterface() {
+  const { isMinWidth } = useViewportWidth();
   const {
     messages,
     isLoading,
@@ -78,50 +79,97 @@ export default function ChatInterface() {
     sendMessage,
     setInputFocusState,
   } = useChatContext();
+  const [messageGroups, setMessageGroups] = useState<MessageGroup[]>([]);
 
-  const { isMinWidth } = useViewportWidth();
-  const messagesRef = useRef<HTMLDivElement>(null);
+  const lastMessageGroupIndex = messageGroups.length - 1;
+  const secondToLastMessageGroupIndex = messageGroups.length - 2;
 
-  const handleMessageSubmit = useCallback(
-    (msg: string) => {
-      sendMessage(msg).catch((error) => {
-        console.error('Failed to send message:', error);
-      });
-    },
-    [sendMessage],
-  );
+  // Update message groups when messages change
+  useEffect(() => {
+    if (messages.length > 0) {
+      const newMessageGroups = createMessageGroups(messages);
+
+      setMessageGroups(newMessageGroups);
+
+      // Auto-scroll to the last message group
+      if (newMessageGroups.length > 0) {
+        const lastMessageGroup = newMessageGroups[newMessageGroups.length - 1];
+        setTimeout(() => {
+          const element = document.getElementById(lastMessageGroup.id);
+          if (element) {
+            element.scrollIntoView({ behavior: 'auto', block: 'start' });
+          }
+        }, 100);
+      }
+    }
+  }, [messages]);
 
   return (
     <>
       <div className="relative mx-auto flex min-h-screen max-w-4xl flex-col px-4">
         <div className="relative">
-          <AnimatePresence>
-            {isLoading ? (
-              <div className="absolute bottom-0 w-full">
+          <div className="flex flex-col">
+            {messageGroups.map((messageGroup, index) => (
+              <AnimatePresence key={messageGroup.id}>
                 <motion.div
-                  id="typing-indicator"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 25 }}
-                  exit={{ opacity: 0, y: 30 }}
-                  transition={{ duration: 0.4, ease: 'easeInOut' }}
-                >
-                  <TypingIndicator />
-                </motion.div>
-              </div>
-            ) : null}
-          </AnimatePresence>
-
-          <div ref={messagesRef}>
-            {messages.map((message) => (
-              <AnimatePresence key={message.id}>
-                <div
-                  id={message.id}
-                  className={`flex w-full ${
-                    message.role === 'user' ? 'justify-end' : 'justify-start'
+                  id={messageGroup.id}
+                  className={`flex flex-col pt-20 ${
+                    index === lastMessageGroupIndex ? 'h-screen' : ''
                   }`}
                 >
-                  <ChatBubble message={message} />
-                </div>
+                  {/* <div className="text-tony-300 text-sm">
+                    isLast: {String(index === lastMessageGroupIndex)}
+                  </div> */}
+                  <div className="flex flex-col gap-4">
+                    <AnimatePresence>
+                      <motion.div
+                        initial={{ opacity: 0, y: 0 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 0 }}
+                        transition={{ duration: 2, ease: [0.4, 0.0, 0.2, 1] }}
+                      >
+                        <ChatBubble message={messageGroup.userMessage} />
+                      </motion.div>
+                    </AnimatePresence>
+                    <AnimatePresence>
+                      {messageGroup.systemMessage.content ? (
+                        <motion.div
+                          initial={{ opacity: 0, y: 0 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 0 }}
+                          transition={{
+                            duration: 1,
+                            ease: [0.4, 0.0, 0.2, 1],
+                          }}
+                        >
+                          <ChatBubble message={messageGroup.systemMessage} />
+                        </motion.div>
+                      ) : null}
+                    </AnimatePresence>
+                  </div>
+                  <AnimatePresence>
+                    {isLoading && index === lastMessageGroupIndex ? (
+                      <motion.div
+                        id="typing-indicator"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 20 }}
+                        exit={{ opacity: 0, y: 20 }}
+                        transition={{ duration: 1, ease: [0.4, 0.0, 0.2, 1] }}
+                      >
+                        <TypingIndicator />
+                      </motion.div>
+                    ) : null}
+                  </AnimatePresence>
+                  <div
+                    className={`spacer ${(() => {
+                      if (isLoading && index >= secondToLastMessageGroupIndex)
+                        return 'min-h-40';
+                      if (index === lastMessageGroupIndex && !isLoading)
+                        return 'min-h-40';
+                      return '';
+                    })()} flex-1 transition-all`}
+                  />
+                </motion.div>
               </AnimatePresence>
             ))}
           </div>
@@ -142,7 +190,7 @@ export default function ChatInterface() {
           <InputContainer
             message={message}
             setMessage={setMessage}
-            onMessageSubmit={handleMessageSubmit}
+            onMessageSubmit={(msg) => void sendMessage(msg)}
             isLoading={isLoading}
             setInputFocusState={setInputFocusState}
             autoFocus={isMinWidth(500)}
@@ -153,7 +201,7 @@ export default function ChatInterface() {
                   key={action.label}
                   label={action.label}
                   icon={action.icon}
-                  onClick={() => void handleMessageSubmit(action.question)}
+                  onClick={() => void sendMessage(action.question)}
                 />
               ))}
             </div>

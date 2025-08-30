@@ -6,7 +6,7 @@ interface BrandLockupProps {
 
 export default function BrandLockup({ markOnly = false }: BrandLockupProps) {
   return (
-    <div className="h-header fixed flex hidden w-full items-center gap-2 px-4">
+    <div className="fixed flex items-center gap-2 p-4">
       <div className="text-tony-mint">
         <svg
           width="31"

@@ -39,7 +39,7 @@ export function useChat(): UseChatReturn {
             message: content,
             history: messages.map((msg) => ({
               role: msg.role,
-              content: msg.content,
+              content: msg.content ?? '',
             })),
           },
           {
