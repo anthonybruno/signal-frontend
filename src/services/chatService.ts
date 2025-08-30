@@ -20,7 +20,7 @@ export interface StreamCallbacks {
 }
 
 export class ChatService {
-  private static readonly STREAM_ENDPOINT = `${process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:3000'}/chat`;
+  private static readonly STREAM_ENDPOINT = `${process.env.NEXT_PUBLIC_API_BASE_URL}/chat`;
 
   private static handleToolsStarting(data: unknown): string | undefined {
     if (data && typeof data === 'object' && 'tool' in data) {
