@@ -99,6 +99,7 @@ function ChatTextInput({
           onFocus={handleFocus}
           onBlur={handleBlur}
           placeholder={animatedPlaceholders ? undefined : 'Ask me anything'}
+          enterKeyHint="send"
           className="placeholder:text-tony-500 dark:placeholder:text-tony-400 box-border block w-full bg-transparent focus:outline-none"
         />
 
