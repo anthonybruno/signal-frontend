@@ -106,7 +106,7 @@ export default function ChatInterface() {
 
   return (
     <>
-      <div className="relative mx-auto flex min-h-screen max-w-4xl flex-col px-4">
+      <div className="relative mx-auto flex min-h-dvh max-w-4xl flex-col px-4">
         <div className="relative">
           <div className="flex flex-col">
             {messageGroups.map((messageGroup, index) => (
@@ -114,7 +114,7 @@ export default function ChatInterface() {
                 <motion.div
                   id={messageGroup.id}
                   className={`flex flex-col pt-20 ${
-                    index === lastMessageGroupIndex ? 'h-screen' : ''
+                    index === lastMessageGroupIndex ? 'h-dvh' : ''
                   }`}
                 >
                   <div className="flex flex-col gap-4">
