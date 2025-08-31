@@ -39,16 +39,12 @@ experience.
 - **Dev tooling:** ESLint, Prettier, Husky, and shared configs via
   [dev-config](https://www.npmjs.com/package/abruno-dev-config)
 
----
-
 ## Local development
 
 Signal’s services can be run locally, but setup involves multiple moving parts.  
 For now, the easiest way to explore Signal is the [live demo](https://signal.abruno.net).
 
 Future work may include a simplified `docker-compose` flow for local development.
-
----
 
 ## Explore
 
@@ -57,8 +53,6 @@ Future work may include a simplified `docker-compose` flow for local development
 - [RAG repo](https://github.com/anthonybruno/signal-rag)
 - [MCP repo](https://github.com/anthonybruno/signal-mcp)
 - [Live demo](https://signal.abruno.net)
-
----
 
 ## Signal context
 
