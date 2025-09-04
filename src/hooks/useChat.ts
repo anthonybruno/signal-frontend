@@ -70,7 +70,7 @@ export function useChat(): UseChatReturn {
         setLoading(false);
       }
     },
-    [isLoading, hasSubmitted, updateChat, setLoading, setHasSubmitted],
+    [isLoading, hasSubmitted],
   );
 
   return { messages, isLoading, sendMessage, hasSubmitted };
