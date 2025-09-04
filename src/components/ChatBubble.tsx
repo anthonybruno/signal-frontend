@@ -57,7 +57,7 @@ function ChatBubble({ message }: ChatBubbleProps) {
           className={`text-pretty break-words ${
             isUser
               ? ''
-              : 'prose prose-headings:font-medium prose-headings:text-xl prose-headings:my-3 prose-a:font-bold prose-a:hover:no-underline'
+              : 'prose prose-headings:font-medium prose-headings:text-xl prose-headings:my-3 prose-a:font-bold prose-a:hover:no-underline prose-code:text-tony-700'
           }`}
         >
           <ReactMarkdown
@@ -72,6 +72,7 @@ function ChatBubble({ message }: ChatBubbleProps) {
                   {children} <Link size={14} />
                 </a>
               ),
+              code: ({ children }) => children,
             }}
           >
             {message.content}
