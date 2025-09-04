@@ -1,10 +1,8 @@
 import {
   CircleUser,
-  AudioLines,
   Handshake,
   Rss,
   Zap,
-  GitCompareArrows,
   Briefcase,
   TrendingUp,
   Info,
