@@ -82,7 +82,6 @@ export default function ChatInterface() {
   const [messageGroups, setMessageGroups] = useState<MessageGroup[]>([]);
   const shouldReduceMotion = useReducedMotion();
   const lastMessageGroupIndex = messageGroups.length - 1;
-  const secondToLastMessageGroupIndex = messageGroups.length - 2;
 
   // Update message groups when messages change
   useEffect(() => {
@@ -173,8 +172,6 @@ export default function ChatInterface() {
                   </AnimatePresence>
                   <div
                     className={`spacer ${(() => {
-                      if (isLoading && index >= secondToLastMessageGroupIndex)
-                        return 'min-h-40';
                       if (index === lastMessageGroupIndex && !isLoading)
                         return 'min-h-40';
                       return '';
