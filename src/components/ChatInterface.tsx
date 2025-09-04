@@ -1,14 +1,4 @@
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import {
-  CircleUser,
-  AudioLines,
-  Handshake,
-  Rss,
-  Zap,
-  GitCompareArrows,
-  Briefcase,
-  TrendingUp,
-} from 'lucide-react';
 import { useEffect, useMemo, useRef } from 'react';
 
 import ChatBubble from '@/components/ChatBubble';
@@ -18,53 +8,7 @@ import TypingIndicator from '@/components/TypingIndicator';
 import { useChatContext } from '@/contexts/ChatContext';
 import { useViewportWidth } from '@/hooks/useViewportWidth';
 import { createMessageGroups } from '@/utils/message';
-
-const QUICK_ACTIONS = [
-  {
-    label: 'About',
-    question:
-      'Tell me about your background and what drives you professionally',
-    icon: CircleUser,
-  },
-  {
-    label: 'Leadership',
-    question:
-      "What's your management philosophy and how do you approach team leadership?",
-    icon: Handshake,
-  },
-  {
-    label: 'Projects',
-    question:
-      'Tell me about your most significant projects and their business impact',
-    icon: Briefcase,
-  },
-  {
-    label: 'Skills',
-    question: 'What are your core technical skills and areas of expertise?',
-    icon: Zap,
-  },
-  {
-    label: 'Career',
-    question:
-      'Walk me through your career progression from IC to Engineering Manager and key leadership learnings',
-    icon: TrendingUp,
-  },
-  {
-    label: 'GitHub',
-    question: 'Show me your recent GitHub activity',
-    icon: GitCompareArrows,
-  },
-  {
-    label: 'Spotify',
-    question: 'What are you currently listening to on Spotify?',
-    icon: AudioLines,
-  },
-  {
-    label: 'Blog',
-    question: 'What is your latest blog post?',
-    icon: Rss,
-  },
-];
+import { CHAT_INTERFACE_ACTIONS } from '@/utils/quickActions';
 
 /**
  * Main chat interface component that displays messages and handles user input
@@ -207,7 +151,7 @@ export default function ChatInterface() {
             autoFocus={isMinWidth(500)}
           >
             <div className="hidden flex-1 items-center gap-1 @min-[835px]:flex">
-              {QUICK_ACTIONS.map((action) => (
+              {CHAT_INTERFACE_ACTIONS.map((action) => (
                 <QuickActionButton
                   key={action.label}
                   label={action.label}

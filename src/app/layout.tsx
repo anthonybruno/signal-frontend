@@ -4,9 +4,9 @@ import type { Metadata } from 'next';
 
 import './globals.css';
 
-const title = 'Signal – A Portfolio You Can Talk To';
+const title = 'Signal — An Interactive Portfolio';
 const description =
-  'Signal is a conversational portfolio where you can explore my projects, career, and leadership style through an interactive chat.';
+  'Explore my projects, career journey, and leadership style through a portfolio designed as a live, conversational experience.';
 const url = 'https://signal.abruno.net';
 
 export const metadata: Metadata = {

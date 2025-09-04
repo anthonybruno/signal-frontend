@@ -1,26 +1,7 @@
-import { ContactRound, AudioLines, Info } from 'lucide-react';
-
 import InputContainer from '@/components/InputContainer';
 import QuickActionButton from '@/components/QuickActionButton';
 import { useChatContext } from '@/contexts/ChatContext';
-
-const QUICK_ACTIONS = [
-  {
-    label: 'About me',
-    question: 'Who are you?',
-    icon: ContactRound,
-  },
-  {
-    label: 'Now playing',
-    question: 'What are you listening to?',
-    icon: AudioLines,
-  },
-  {
-    label: 'What is Signal',
-    question: 'Tell me about this project',
-    icon: Info,
-  },
-];
+import { WELCOME_SCREEN_ACTIONS } from '@/utils/quickActions';
 
 export default function WelcomeScreen() {
   const { message, setMessage, sendMessage, isLoading, setInputFocusState } =
@@ -47,7 +28,7 @@ export default function WelcomeScreen() {
           animatedPlaceholders
         />
         <div className="hidden items-center gap-3 pb-3 md:flex">
-          {QUICK_ACTIONS.map((action) => (
+          {WELCOME_SCREEN_ACTIONS.map((action) => (
             <QuickActionButton
               key={action.label}
               label={action.label}
