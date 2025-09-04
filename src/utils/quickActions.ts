@@ -1,12 +1,14 @@
 import {
-  CircleUser,
-  Handshake,
-  Rss,
-  Zap,
+  AudioLines,
   Briefcase,
-  TrendingUp,
-  Info,
+  CircleUser,
   ContactRound,
+  GitCompareArrows,
+  Handshake,
+  Info,
+  Rss,
+  TrendingUp,
+  Zap,
 } from 'lucide-react';
 
 export interface QuickAction {
@@ -17,7 +19,7 @@ export interface QuickAction {
     size?: number;
     strokeWidth?: number;
   }>;
-  category: 'personal' | 'professional' | 'social' | 'project';
+  category: 'welcome' | 'chat';
 }
 
 // Centralized quick actions configuration
@@ -26,54 +28,71 @@ export const QUICK_ACTIONS: QuickAction[] = [
     label: 'About me',
     question: 'Who are you?',
     icon: ContactRound,
-    category: 'personal',
+    category: 'welcome',
   },
   {
-    label: 'Background',
+    label: 'Now playing',
+    question: 'What are you listening to?',
+    icon: AudioLines,
+    category: 'welcome',
+  },
+  {
+    label: 'What is Signal',
+    question: 'Tell me about this project',
+    icon: Info,
+    category: 'welcome',
+  },
+  {
+    label: 'About',
     question:
       'Tell me about your background and what drives you professionally',
     icon: CircleUser,
-    category: 'professional',
+    category: 'chat',
   },
   {
     label: 'Leadership',
     question:
       "What's your management philosophy and how do you approach team leadership?",
     icon: Handshake,
-    category: 'professional',
+    category: 'chat',
   },
   {
     label: 'Projects',
     question:
       'Tell me about your most significant projects and their business impact',
     icon: Briefcase,
-    category: 'professional',
+    category: 'chat',
   },
   {
     label: 'Skills',
     question: 'What are your core technical skills and areas of expertise?',
     icon: Zap,
-    category: 'professional',
+    category: 'chat',
   },
   {
     label: 'Career',
     question:
       'Walk me through your career progression from IC to Engineering Manager and key leadership learnings',
     icon: TrendingUp,
-    category: 'professional',
+    category: 'chat',
   },
   {
-    label: 'Social',
-    question:
-      'Show me your recent GitHub activity, Spotify listening, and latest blog post',
+    label: 'GitHub',
+    question: 'Show me your recent GitHub activity',
+    icon: GitCompareArrows,
+    category: 'chat',
+  },
+  {
+    label: 'Spotify',
+    question: 'What are you currently listening to on Spotify?',
+    icon: AudioLines,
+    category: 'chat',
+  },
+  {
+    label: 'Blog',
+    question: 'What is your latest blog post?',
     icon: Rss,
-    category: 'social',
-  },
-  {
-    label: 'Signal',
-    question: 'Tell me about this project',
-    icon: Info,
-    category: 'project',
+    category: 'chat',
   },
 ];
 
@@ -85,13 +104,7 @@ export function getQuickActionsByCategory(
 }
 
 // Get welcome screen actions (personal + project)
-export const WELCOME_SCREEN_ACTIONS = getQuickActionsByCategory([
-  'personal',
-  'project',
-]);
+export const WELCOME_SCREEN_ACTIONS = getQuickActionsByCategory(['welcome']);
 
 // Get chat interface actions (professional + social)
-export const CHAT_INTERFACE_ACTIONS = getQuickActionsByCategory([
-  'professional',
-  'social',
-]);
+export const CHAT_INTERFACE_ACTIONS = getQuickActionsByCategory(['chat']);
