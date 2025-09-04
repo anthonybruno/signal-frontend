@@ -1,4 +1,4 @@
-import { Wrench } from 'lucide-react';
+import { Link, Wrench } from 'lucide-react';
 import { memo, useRef, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
@@ -57,10 +57,25 @@ function ChatBubble({ message }: ChatBubbleProps) {
           className={`text-pretty break-words ${
             isUser
               ? ''
-              : 'prose prose-headings:font-medium prose-headings:text-xl prose-headings:my-3'
+              : 'prose prose-headings:font-medium prose-headings:text-xl prose-headings:my-3 prose-a:font-bold prose-a:hover:no-underline'
           }`}
         >
-          <ReactMarkdown>{message.content}</ReactMarkdown>
+          <ReactMarkdown
+            components={{
+              a: ({ href, children }) => (
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 px-1"
+                >
+                  {children} <Link size={14} />
+                </a>
+              ),
+            }}
+          >
+            {message.content}
+          </ReactMarkdown>
         </div>
       </div>
     </div>

@@ -27,13 +27,15 @@ export function useChat(): UseChatReturn {
   // Use refs to access current values without causing re-renders
   const messagesRef = useRef<Message[]>([]);
   const handleStreamingChunkRef = useRef(handleStreamingChunk);
+  const isLoadingRef = useRef(false);
 
   messagesRef.current = messages;
   handleStreamingChunkRef.current = handleStreamingChunk;
+  isLoadingRef.current = isLoading;
 
   const sendMessage = useCallback(
     async (content: string) => {
-      if (!content.trim() || isLoading) return;
+      if (!content.trim() || isLoadingRef.current) return;
 
       if (!hasSubmitted) setHasSubmitted(true);
 
@@ -70,7 +72,7 @@ export function useChat(): UseChatReturn {
         setLoading(false);
       }
     },
-    [isLoading, hasSubmitted],
+    [updateChat, setLoading, setHasSubmitted],
   );
 
   return { messages, isLoading, sendMessage, hasSubmitted };
