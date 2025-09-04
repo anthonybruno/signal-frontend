@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 
 import { ChatService } from '@/services/chatService';
 import type { Message } from '@/types';
@@ -24,6 +24,13 @@ export function useChat(): UseChatReturn {
     setHasSubmitted,
   } = useChatState();
 
+  // Use refs to access current values without causing re-renders
+  const messagesRef = useRef<Message[]>([]);
+  const handleStreamingChunkRef = useRef(handleStreamingChunk);
+
+  messagesRef.current = messages;
+  handleStreamingChunkRef.current = handleStreamingChunk;
+
   const sendMessage = useCallback(
     async (content: string) => {
       if (!content.trim() || isLoading) return;
@@ -37,14 +44,14 @@ export function useChat(): UseChatReturn {
         await ChatService.streamChat(
           {
             message: content,
-            history: messages.map((msg) => ({
+            history: messagesRef.current.map((msg) => ({
               role: msg.role,
               content: msg.content ?? '',
             })),
           },
           {
             onChunk: (chunk, mcpTool) => {
-              handleStreamingChunk(chunk, mcpTool);
+              handleStreamingChunkRef.current(chunk, mcpTool);
             },
             onError: () => {
               updateChat(
@@ -63,15 +70,7 @@ export function useChat(): UseChatReturn {
         setLoading(false);
       }
     },
-    [
-      isLoading,
-      messages,
-      hasSubmitted,
-      updateChat,
-      handleStreamingChunk,
-      setLoading,
-      setHasSubmitted,
-    ],
+    [isLoading, hasSubmitted, updateChat, setLoading, setHasSubmitted],
   );
 
   return { messages, isLoading, sendMessage, hasSubmitted };

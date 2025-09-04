@@ -9,7 +9,7 @@ import {
   Briefcase,
   TrendingUp,
 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import ChatBubble from '@/components/ChatBubble';
 import InputContainer from '@/components/InputContainer';
@@ -17,7 +17,7 @@ import QuickActionButton from '@/components/QuickActionButton';
 import TypingIndicator from '@/components/TypingIndicator';
 import { useChatContext } from '@/contexts/ChatContext';
 import { useViewportWidth } from '@/hooks/useViewportWidth';
-import { createMessageGroups, type MessageGroup } from '@/utils/message';
+import { createMessageGroups } from '@/utils/message';
 
 const QUICK_ACTIONS = [
   {
@@ -78,36 +78,39 @@ export default function ChatInterface() {
     setMessage,
     sendMessage,
     setInputFocusState,
+    handleQuickAction,
   } = useChatContext();
-  const [messageGroups, setMessageGroups] = useState<MessageGroup[]>([]);
   const shouldReduceMotion = useReducedMotion();
+
+  // Track if user has manually scrolled
+  const previousMessageCountRef = useRef(0);
+
+  // Memoize message groups to prevent unnecessary re-renders during streaming
+  const messageGroups = useMemo(() => {
+    return messages.length > 0 ? createMessageGroups(messages) : [];
+  }, [messages]);
+
   const lastMessageGroupIndex = messageGroups.length - 1;
 
-  // Update message groups when messages change
   useEffect(() => {
-    if (messages.length > 0) {
-      const newMessageGroups = createMessageGroups(messages);
-
-      setMessageGroups(newMessageGroups);
-
-      // Auto-scroll to the last message group
-      if (newMessageGroups.length > 0) {
+    if (messageGroups.length > 0) {
+      const isNewMessage =
+        messageGroups.length > previousMessageCountRef.current;
+      if (isNewMessage) {
+        // Removed userHasScrolled check
         const reduceMotion = window.matchMedia(
           '(prefers-reduced-motion: reduce)',
         ).matches;
-        const lastMessageGroup = newMessageGroups[newMessageGroups.length - 1];
         setTimeout(() => {
-          const element = document.getElementById(lastMessageGroup.id);
-          if (element) {
-            element.scrollIntoView({
-              behavior: reduceMotion ? 'instant' : 'smooth',
-              block: 'start',
-            });
-          }
+          window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: reduceMotion ? 'instant' : 'smooth',
+          });
         }, 100);
       }
+      previousMessageCountRef.current = messageGroups.length;
     }
-  }, [messages]);
+  }, [messageGroups]); // Removed userHasScrolled from dependency array
 
   return (
     <>
@@ -171,11 +174,11 @@ export default function ChatInterface() {
                     ) : null}
                   </AnimatePresence>
                   <div
-                    className={`spacer ${(() => {
-                      if (index === lastMessageGroupIndex && !isLoading)
-                        return 'min-h-40';
-                      return '';
-                    })()} flex-1 transition-all`}
+                    className={`spacer ${
+                      index === lastMessageGroupIndex && !isLoading
+                        ? 'min-h-40'
+                        : ''
+                    } flex-1 transition-all`}
                   />
                 </motion.div>
               </AnimatePresence>
@@ -209,7 +212,7 @@ export default function ChatInterface() {
                   key={action.label}
                   label={action.label}
                   icon={action.icon}
-                  onClick={() => void sendMessage(action.question)}
+                  onClick={() => handleQuickAction(action.question)}
                 />
               ))}
             </div>

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useReducer } from 'react';
 
 import type { Message } from '@/types';
 import { createMessage } from '@/utils/message';
@@ -17,82 +17,113 @@ interface UseChatStateReturn {
   setHasSubmitted: (submitted: boolean) => void;
 }
 
-export function useChatState(): UseChatStateReturn {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasSubmitted, setHasSubmitted] = useState(false);
+type ChatAction =
+  | { type: 'ADD_MESSAGE'; message: Message }
+  | { type: 'UPDATE_MESSAGE'; message: Message; index: number }
+  | { type: 'APPEND_CHUNK'; chunk: string; mcpTool?: string }
+  | { type: 'SET_LOADING'; loading: boolean }
+  | { type: 'SET_HAS_SUBMITTED'; submitted: boolean };
 
-  /**
-   * Updates the chat conversation by either adding new messages or updating existing ones
-   * This handles both user messages and streaming AI responses
-   *
-   * @param action - 'add' to create new message, 'update' to modify existing message
-   * @param message - The message content to add or update
-   * @param index - Required for 'update' action - which message to modify
-   */
+interface ChatState {
+  messages: Message[];
+  isLoading: boolean;
+  hasSubmitted: boolean;
+}
+
+function chatReducer(state: ChatState, action: ChatAction): ChatState {
+  switch (action.type) {
+    case 'ADD_MESSAGE':
+      return {
+        ...state,
+        messages: [...state.messages, action.message],
+      };
+
+    case 'UPDATE_MESSAGE': {
+      const newMessages = [...state.messages];
+      newMessages[action.index] = {
+        ...newMessages[action.index],
+        content:
+          (newMessages[action.index].content || '') +
+          (action.message.content || ''),
+      };
+      return { ...state, messages: newMessages };
+    }
+
+    case 'APPEND_CHUNK': {
+      if (state.messages.length === 0) {
+        return {
+          ...state,
+          messages: [createMessage('system', action.chunk, action.mcpTool)],
+        };
+      }
+
+      const lastMessage = state.messages[state.messages.length - 1];
+      if (lastMessage.role === 'system') {
+        const newMessages = [...state.messages];
+        newMessages[newMessages.length - 1] = {
+          ...lastMessage,
+          content: (lastMessage.content || '') + action.chunk,
+        };
+        return { ...state, messages: newMessages };
+      } else {
+        return {
+          ...state,
+          messages: [
+            ...state.messages,
+            createMessage('system', action.chunk, action.mcpTool),
+          ],
+        };
+      }
+    }
+
+    case 'SET_LOADING':
+      return { ...state, isLoading: action.loading };
+
+    case 'SET_HAS_SUBMITTED':
+      return { ...state, hasSubmitted: action.submitted };
+
+    default:
+      return state;
+  }
+}
+
+export function useChatState(): UseChatStateReturn {
+  const [state, dispatch] = useReducer(chatReducer, {
+    messages: [],
+    isLoading: false,
+    hasSubmitted: false,
+  });
+
   const updateChat = useCallback(
     (action: 'add' | 'update', message: Message, index?: number) => {
-      setMessages((prev) => {
-        // Add a new message to the end of the conversation
-        if (action === 'add') {
-          return [...prev, message];
-        }
-
-        // Update an existing message (used for streaming responses)
-        if (index !== undefined && prev[index]) {
-          const newMessages = [...prev];
-          // Append to the existing message content for streaming
-          newMessages[index] = {
-            ...newMessages[index],
-            content: (prev[index].content || '') + (message.content || ''),
-          };
-          return newMessages;
-        }
-
-        // Fallback: return unchanged messages if action is invalid
-        return prev;
-      });
+      if (action === 'add') {
+        dispatch({ type: 'ADD_MESSAGE', message });
+      } else if (index !== undefined) {
+        dispatch({ type: 'UPDATE_MESSAGE', message, index });
+      }
     },
     [],
   );
 
-  /**
-   * Handles streaming chunks by either creating a new message or appending to existing one
-   */
   const handleStreamingChunk = useCallback(
     (chunk: string, mcpTool?: string) => {
-      setMessages((prev) => {
-        const lastMessage = prev[prev.length - 1];
-
-        if (lastMessage.role === 'system') {
-          // Append to existing system message
-          const newMessages = [...prev];
-          newMessages[newMessages.length - 1] = {
-            ...lastMessage,
-            content: lastMessage.content + chunk,
-          };
-          return newMessages;
-        } else {
-          // Create new system message
-          return [...prev, createMessage('system', chunk, mcpTool)];
-        }
-      });
+      dispatch({ type: 'APPEND_CHUNK', chunk, mcpTool });
     },
     [],
   );
 
   const setLoading = useCallback((loading: boolean) => {
-    setIsLoading(loading);
+    dispatch({ type: 'SET_LOADING', loading });
   }, []);
 
   const setHasSubmittedCallback = useCallback((submitted: boolean) => {
-    setHasSubmitted(submitted);
+    dispatch({ type: 'SET_HAS_SUBMITTED', submitted });
   }, []);
 
   return {
-    messages,
-    isLoading,
-    hasSubmitted,
+    messages: state.messages,
+    isLoading: state.isLoading,
+    hasSubmitted: state.hasSubmitted,
     updateChat,
     handleStreamingChunk,
     setLoading,
