@@ -42,9 +42,9 @@ function ChatTextInput({
 
   const placeholders = [
     'Let’s talk about what drives your work',
-    'Whats your favorite dessert?',
+    'Thoughts on the Costco hot dog',
     'Tell me about a time you...',
-    'A project that made a real impact',
+    'Whats your favorite dessert?',
     'Chasing growth, purpose, and clarity',
   ];
 
