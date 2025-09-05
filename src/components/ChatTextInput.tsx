@@ -3,7 +3,7 @@
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 
-import { useViewportWidth } from '../hooks/useViewportWidth';
+import { useViewportWidth } from '@/hooks/useViewportWidth';
 
 interface ChatTextInputProps {
   message: string;
@@ -41,11 +41,11 @@ function ChatTextInput({
   };
 
   const placeholders = [
-    'What drives you professionally?',
-    'How do you approach leadership?',
-    'Which projects are you proud of?',
-    'How do you stay sharp with tech?',
-    'What are you exploring right now?',
+    'Let’s talk about what drives your work',
+    'Whats your favorite dessert?',
+    'Tell me about a time you...',
+    'A project that made a real impact',
+    'Chasing growth, purpose, and clarity',
   ];
 
   useEffect(() => {

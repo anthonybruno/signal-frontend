@@ -1,4 +1,10 @@
-import { Link, Wrench } from 'lucide-react';
+import {
+  ChevronsLeftRightEllipsis,
+  Link,
+  Sparkles,
+  WandSparkles,
+  Wrench,
+} from 'lucide-react';
 import { memo, useRef, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
@@ -46,9 +52,9 @@ function ChatBubble({ message }: ChatBubbleProps) {
         }
       >
         {message.mcpTool ? (
-          <div className="flex items-center gap-2 pt-1 text-sm">
-            <Wrench strokeWidth={2.25} size={14} />
-            <span>MCP used:</span>
+          <div className="flex items-center gap-2 pb-3 text-sm">
+            <WandSparkles strokeWidth={2.25} size={16} />
+            <strong>MCP used:</strong>
             <span className="text-tony-mint font-mono">{message.mcpTool}</span>
           </div>
         ) : null}
@@ -73,6 +79,7 @@ function ChatBubble({ message }: ChatBubbleProps) {
                 </a>
               ),
               code: ({ children }) => children,
+              hr: ({ children }) => children,
             }}
           >
             {message.content}

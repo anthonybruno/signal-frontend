@@ -27,6 +27,8 @@
   --color-tony-700: #2b2b2b;
   --color-tony-800: #1f1f1f;
 
+  --text-lg: 1.0625rem;
+  --text-lg--line-height: 1.75;
   --font-sans: 'system-ui', sans-serif;
 
   /* Use px (not rem) so components can read these values as numbers for conditional logic */
@@ -65,6 +67,7 @@
       scrollbar-color: var(--color-tony-500) var(--color-tony-500);
     }
     .prose {
+      @apply text-base md:text-lg;
       --tw-prose-body: var(--color-tony-200);
       --tw-prose-headings: var(--color-tony-100);
       --tw-prose-lead: var(--color-tony-300);

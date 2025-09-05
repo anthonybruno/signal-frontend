@@ -1,14 +1,14 @@
 import {
   AudioLines,
-  Briefcase,
-  CircleUser,
-  ContactRound,
+  Cpu,
   GitCompareArrows,
-  Handshake,
   Info,
+  Package,
   Rss,
-  TrendingUp,
-  Zap,
+  Smile,
+  SquareChartGantt,
+  SquareUser,
+  Users,
 } from 'lucide-react';
 
 export interface QuickAction {
@@ -26,72 +26,70 @@ export interface QuickAction {
 export const QUICK_ACTIONS: QuickAction[] = [
   {
     label: 'About me',
-    question: 'Who are you?',
-    icon: ContactRound,
+    question: 'Oh hey! Tell me a little about yourself.',
+    icon: Smile,
     category: 'welcome',
   },
   {
     label: 'Now playing',
-    question: 'What are you listening to?',
+    question: 'What are you listening to right now?',
     icon: AudioLines,
     category: 'welcome',
   },
   {
     label: 'What is Signal',
-    question: 'Tell me about this project',
+    question: 'Can you give me a quick overview of Signal?',
     icon: Info,
     category: 'welcome',
   },
   {
     label: 'About',
-    question:
-      'Tell me about your background and what drives you professionally',
-    icon: CircleUser,
-    category: 'chat',
-  },
-  {
-    label: 'Leadership',
-    question:
-      "What's your management philosophy and how do you approach team leadership?",
-    icon: Handshake,
-    category: 'chat',
-  },
-  {
-    label: 'Projects',
-    question:
-      'Tell me about your most significant projects and their business impact',
-    icon: Briefcase,
-    category: 'chat',
-  },
-  {
-    label: 'Skills',
-    question: 'What are your core technical skills and areas of expertise?',
-    icon: Zap,
+    question: 'Who are you and what drives your work?',
+    icon: SquareUser,
     category: 'chat',
   },
   {
     label: 'Career',
     question:
-      'Walk me through your career progression from IC to Engineering Manager and key leadership learnings',
-    icon: TrendingUp,
+      'Can you walk me through your career journey and how it shaped your approach?',
+    icon: SquareChartGantt,
     category: 'chat',
   },
   {
-    label: 'GitHub',
-    question: 'Show me your recent GitHub activity',
+    label: 'Leadership',
+    question: 'How do you grow engineers and build strong teams?',
+    icon: Users,
+    category: 'chat',
+  },
+  {
+    label: 'Projects',
+    question:
+      'Which projects best highlight your technical and leadership impact?',
+    icon: Package,
+    category: 'chat',
+  },
+  {
+    label: 'Skills',
+    question: 'What skills help you most as both an engineer and a manager?',
+    icon: Cpu,
+    category: 'chat',
+  },
+  {
+    label: 'Github',
+    question: 'What have you been working on in Github?',
     icon: GitCompareArrows,
     category: 'chat',
   },
   {
-    label: 'Spotify',
-    question: 'What are you currently listening to on Spotify?',
-    icon: AudioLines,
+    label: 'Blog',
+    question: 'What have you been writing about lately?',
+    icon: Rss,
     category: 'chat',
   },
   {
-    label: 'Blog',
-    question: 'What is your latest blog post?',
-    icon: Rss,
+    label: 'Spotify',
+    question: 'What are you listening to right now?',
+    icon: AudioLines,
     category: 'chat',
   },
 ];

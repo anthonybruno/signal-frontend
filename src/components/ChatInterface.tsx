@@ -69,7 +69,7 @@ export default function ChatInterface() {
                     index === lastMessageGroupIndex ? 'h-dvh' : ''
                   }`}
                 >
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-10">
                     <AnimatePresence>
                       <motion.div
                         initial={{ opacity: 0, y: 0 }}
@@ -100,6 +100,7 @@ export default function ChatInterface() {
                     {isLoading && index === lastMessageGroupIndex ? (
                       <motion.div
                         id="typing-indicator"
+                        className="mt-7"
                         initial={
                           shouldReduceMotion
                             ? { opacity: 0 }
