@@ -1,10 +1,4 @@
-import {
-  ChevronsLeftRightEllipsis,
-  Link,
-  Sparkles,
-  WandSparkles,
-  Wrench,
-} from 'lucide-react';
+import { Link, WandSparkles } from 'lucide-react';
 import { memo, useRef, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
