@@ -52,7 +52,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-tony-off-white dark:bg-tony-800 text-tony-700 dark:text-tony-100">
+      <body className="bg-tony-off-white dark:bg-tony-800 text-tony-700 dark:text-tony-100 before:bg-tony-mint before:fixed before:top-0 before:left-0 before:h-1.5 before:w-full before:content-['']">
         <ChatProvider>{children}</ChatProvider>
       </body>
     </html>
