@@ -1,10 +1,10 @@
 import {
-  AudioLines,
+  // AudioLines,
   Cpu,
   GitCompareArrows,
   Info,
   Package,
-  Rss,
+  // Rss,
   Smile,
   SquareChartGantt,
   SquareUser,
@@ -80,18 +80,18 @@ export const QUICK_ACTIONS: QuickAction[] = [
     icon: GitCompareArrows,
     category: 'chat',
   },
-  {
-    label: 'Blog',
-    question: 'What have you been writing about lately?',
-    icon: Rss,
-    category: 'chat',
-  },
-  {
-    label: 'Spotify',
-    question: 'What are you listening to right now?',
-    icon: AudioLines,
-    category: 'chat',
-  },
+  // {
+  //   label: 'Blog',
+  //   question: 'What have you been writing about lately?',
+  //   icon: Rss,
+  //   category: 'chat',
+  // },
+  // {
+  //   label: 'Spotify',
+  //   question: 'What are you listening to right now?',
+  //   icon: AudioLines,
+  //   category: 'chat',
+  // },
 ];
 
 // Filter quick actions by category
