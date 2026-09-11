@@ -30,12 +30,12 @@ export const QUICK_ACTIONS: QuickAction[] = [
     icon: Smile,
     category: 'welcome',
   },
-  {
-    label: 'Now playing',
-    question: 'What are you listening to right now?',
-    icon: AudioLines,
-    category: 'welcome',
-  },
+  // {
+  //   label: 'Now playing',
+  //   question: 'What are you listening to right now?',
+  //   icon: AudioLines,
+  //   category: 'welcome',
+  // },
   {
     label: 'What is Signal',
     question: 'Can you give me a quick overview of Signal?',
